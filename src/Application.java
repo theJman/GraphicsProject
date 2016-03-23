@@ -10,7 +10,9 @@ import com.jogamp.opengl.util.*;
 
 /**
  * Graphics Project
- *
+ * 
+ * Air Hockey Simulator
+ * 
  * @author Team Awesome
  */
 public final class Application
