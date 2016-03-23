@@ -44,6 +44,7 @@ public final class View
 	private Point2D.Double				origin;		// Current origin coordinates
 	private Point2D.Double				cursor;		// Current cursor coordinates
 	private ArrayList<Point2D.Double>	points;		// User's polyline points
+	private ArrayList<Shape> 			shapes;
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -66,6 +67,12 @@ public final class View
 		// Initialize interaction
 		keyHandler = new KeyHandler(this);
 		mouseHandler = new MouseHandler(this);
+		
+		//initialize shapes
+		shapes = new ArrayList<Shape>();
+		
+		//test shape
+		shapes.add(new Circle(this));
 	}
 
 	//**********************************************************************
@@ -111,11 +118,23 @@ public final class View
 		canvas.repaint();
 	}
 
-	public void		add(Point2D.Double p)
-	{
-		points.add(p);
-		canvas.repaint();
+
+	//**********************************************************************
+	// Mouse movement
+	//**********************************************************************
+	
+	public void mousePressed(Point2D.Double p){
+		
 	}
+	
+	public void mouseDrag(Point2D.Double p){
+		
+	}
+	
+	public void mouseRelease(Point2D.Double p){
+		
+	}
+	
 
 	//**********************************************************************
 	// Public Methods
@@ -184,6 +203,12 @@ public final class View
 	private void	update(GLAutoDrawable drawable)
 	{
 		counter++;								// Counters are useful, right?
+		//update the shapes
+		for (Shape s : shapes){
+			s.update(drawable);
+		}
+		canvas.repaint();
+
 	}
 
 	private void	render(GLAutoDrawable drawable)
@@ -191,6 +216,12 @@ public final class View
 		GL2		gl = drawable.getGL().getGL2();
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);		// Clear the buffer
+		
+		//render all of the shapes
+		for (Shape s : shapes) {
+			s.render(drawable);
+		}
+		
 		drawBounds(gl);							// Unit bounding box
 		drawAxes(gl);							// X and Y axes
 		drawCursor(gl);							// Crosshairs at mouse location

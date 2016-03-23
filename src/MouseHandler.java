@@ -39,18 +39,15 @@ public final class MouseHandler extends MouseAdapter
 	public void		mouseClicked(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
-
-		if (Utilities.isShiftDown(e))
-			view.setOrigin(v);
-		else
-			view.add(v);
+		System.out.println(v.getX() + " : "+ v.getY());
+		
 	}
 
 	public void		mouseEntered(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
 
-		view.setCursor(v);
+		//view.setCursor(v);
 	}
 
 	public void		mouseExited(MouseEvent e)
@@ -60,10 +57,16 @@ public final class MouseHandler extends MouseAdapter
 
 	public void		mousePressed(MouseEvent e)
 	{
+		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
+
+		view.mousePressed(v);
 	}
 
 	public void		mouseReleased(MouseEvent e)
 	{
+		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
+
+		view.mouseRelease(v);
 	}
 
 	//**********************************************************************
@@ -74,15 +77,14 @@ public final class MouseHandler extends MouseAdapter
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
 
-		view.add(v);
-		view.setCursor(v);
+		view.mouseDrag(v);
 	}
 
 	public void		mouseMoved(MouseEvent e)
 	{
-		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
-
-		view.setCursor(v);
+//		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
+//
+//		view.setCursor(v);
 	}
 
 	//**********************************************************************

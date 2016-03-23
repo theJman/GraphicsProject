@@ -22,7 +22,7 @@ public final class Application
 	//**********************************************************************
 
 	public static final Rectangle	DEFAULT_BOUNDS =
-		new Rectangle(50, 50, 500, 500);
+		new Rectangle(50, 50, 1000, 500);
 
 	//**********************************************************************
 	// Main
