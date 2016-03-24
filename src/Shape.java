@@ -95,5 +95,25 @@ public class Shape {
 
 		return new Point2D.Double(vx, vy);
 	}
+	
+	public Point2D.Double getVelocityNotInView(){
+		int				w = view.getWidth();
+		int				h = view.getHeight();
+		Point2D.Double	p = view.getOrigin();
+		double			 vx = (velocity.x -p.x + 1.0) * w / 2.0;
+		double			 vy = -(velocity.y - p.y -1.0) * h / 2.0;
 
+		return new Point2D.Double(vx, vy);
+	}
+	
+	public void setVelocityToInView(Point2D.Double nVel){
+		int				w = view.getWidth();
+		int				h = view.getHeight();
+		Point2D.Double	p = view.getOrigin();
+		double			vx = p.x + (nVel.x * 2.0) / w - 1.0;
+		double			vy = p.y - (nVel.y * 2.0) / h + 1.0;
+
+		velocity.x = vx;
+		velocity.y = vy;
+	}
 }

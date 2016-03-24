@@ -14,6 +14,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 public class Circle extends Shape {
 
 	protected double radius = 100;
+	protected int cantBounceTick = 0;//only can bounce when this is 0. Added so cicles cannot stick together!:)
 	
 	/**
 	 * @param nView
@@ -43,7 +44,7 @@ public class Circle extends Shape {
 	//private methods
 	private void drawCircle(GL2 gl){
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		setColor(gl, 255, 0, 0);
+		setColor(gl, 54, 253, 17);
 		gl.glVertex2d(center.x, center.y);
 		
 		for (int i=0; i<=32; i++)
@@ -86,6 +87,11 @@ public class Circle extends Shape {
 	}
 
 	
+	
+	public void decrementCantBounceTick(){
+		if(cantBounceTick > 0)
+			cantBounceTick--;
+	}
 	
 	
 

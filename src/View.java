@@ -217,12 +217,15 @@ public final class View
 	private void	update(GLAutoDrawable drawable)
 	{
 		counter++;								// Counters are useful, right?
+		
+		circlesInteraction.update();
+
+		
 		//update the shapes
 		for (Shape s : shapes){
 			s.update(drawable);
 		}
 		
-		circlesInteraction.update();
 		
 		canvas.repaint();
 

@@ -33,26 +33,63 @@ public class CircleInteraction {
 		Set<Circle> alreadyUpdatedCircles = new HashSet<Circle>();//set of circles that we have updated and don't need to again
 		
 		for (Circle c1 : circles){
-			if(!alreadyUpdatedCircles.contains(c1)){
+			c1.decrementCantBounceTick();//decrement all cant bounce ticks
+			if(!alreadyUpdatedCircles.contains(c1) && c1.cantBounceTick == 0){
 				//havent updated yet
 				//check if it touches another
 				for (Circle c2 : circles){
-					if(c1 != c2 && !alreadyUpdatedCircles.contains(c2)){
+					if(c1 != c2 && !alreadyUpdatedCircles.contains(c2) && c2.cantBounceTick == 0){
 						//circles are different and the second has yet to have an interaction
 						//find out if the are touching
 						Point2D.Double center1 = c1.getCenterNotInView();
 						Point2D.Double center2 = c2.getCenterNotInView();
+						
+						
+						
 						//find distance between
 						double distance = center1.distance(center2);
-						if(distance < c1.getRadius()/2 + c2.getRadius()/2){
-							//they are touching each other
-							Point2D.Double c1Vel = new Point2D.Double(c1.velocity.x, c1.velocity.y);
-							//flip the velocities
-							c1.velocity.x = c2.velocity.x;
-							c1.velocity.y = c2.velocity.y;
-							c2.velocity.x = c1Vel.x;
-							c2.velocity.y = c1Vel.y;
-							//make sure we don't flip again
+						if(distance <= c1.getRadius()/2 + c2.getRadius()/2){
+							//calculate new velocities
+							//normal unit vector
+							Point2D.Double nUnit = new Point2D.Double(center2.x-center1.x, center2.y-center1.y);
+							double normalMag = Math.sqrt(nUnit.x*nUnit.x + nUnit.y*nUnit.y);
+							nUnit.x = nUnit.x/normalMag;
+							nUnit.y = nUnit.y/normalMag;
+							//tangent unit vector
+							Point2D.Double tUnit = new Point2D.Double(-nUnit.y, nUnit.x);
+							//velocities
+							Point2D.Double v1 = new Point2D.Double(c1.getVelocityNotInView().x, c1.getVelocityNotInView().y);
+							Point2D.Double v2 = new Point2D.Double(c2.getVelocityNotInView().x, c2.getVelocityNotInView().y);
+							//velocity unit and tangent vectors
+							Point2D.Double v1n = dotProduct(nUnit, v1);
+							Point2D.Double v1t = dotProduct(tUnit, v1);
+							Point2D.Double v2n = dotProduct(nUnit, v2);
+							Point2D.Double v2t = dotProduct(tUnit, v2);
+							//dummy mass in case we ever want to change these
+							double m1 = 1, m2 = 1;
+							//calculate new normal velocities
+							Point2D.Double v1nCopy = dotProduct(nUnit, v1);
+							v1n.x = (v1n.x*(m1-m2) + 2*m2*v2n.x)/(m1+m2);
+							v1n.y = (v1n.y*(m1-m2) + 2*m2*v2n.y)/(m1+m2);
+
+							v2n.x = (v2n.x*(m2-m1) + 2*m1*v1nCopy.x)/(m1+m2);
+							v2n.y = (v2n.y*(m2-m1) + 2*m1*v1nCopy.y)/(m1+m2);
+							
+							//calculate final unit and tangent velocities
+							v1n = dotProduct(v1n, nUnit);
+							v1t = dotProduct(v1t, tUnit);
+							v2n = dotProduct(v2n, nUnit);
+							v2t = dotProduct(v2t, tUnit);
+							
+							//final velocities
+							c1.setVelocityToInView(vectorAdd(v1n, v1t));
+							c2.setVelocityToInView(vectorAdd(v2n, v2t));
+							
+							//use the cantBounceTick to prevent sticking together
+							c1.cantBounceTick = 10;
+							c2.cantBounceTick = 10;
+							
+							//we don't need to do anything with this cicles again on this bounce
 							alreadyUpdatedCircles.add(c2);
 							alreadyUpdatedCircles.add(c1);
 						}
@@ -64,6 +101,21 @@ public class CircleInteraction {
 		}
 		
 	}
+	
+	/**
+	 * Gets the dot product of two vectors
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public Point2D.Double dotProduct(Point2D.Double v1, Point2D.Double v2){
+		return new Point2D.Double(v1.x*v2.x, v1.y*v2.y);
+	}
+	
+	public Point2D.Double vectorAdd(Point2D.Double v1, Point2D.Double v2){
+		return new Point2D.Double(v1.x+v2.x, v1.y+v2.y);
+	}
+	
 	
 	
 }
