@@ -75,6 +75,25 @@ public class Shape {
 
 	}
 	
-	
+	//getters and setters
+	public Point2D.Double getVelocity(){
+		return velocity;
+	}
+	public Point2D.Double getCenter(){
+		return center;
+	}
+	public Point2D.Double getAcceleration(){
+		return acceleration;
+	}
+
+	public Point2D.Double getCenterNotInView(){
+		int				w = view.getWidth();
+		int				h = view.getHeight();
+		Point2D.Double	p = view.getOrigin();
+		double			 vx = (center.x -p.x + 1.0) * w / 2.0;
+		double			 vy = -(center.y - p.y -1.0) * h / 2.0;
+
+		return new Point2D.Double(vx, vy);
+	}
 
 }

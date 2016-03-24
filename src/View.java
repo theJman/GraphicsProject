@@ -44,7 +44,8 @@ public final class View
 	private Point2D.Double				origin;		// Current origin coordinates
 	private Point2D.Double				cursor;		// Current cursor coordinates
 	private ArrayList<Point2D.Double>	points;		// User's polyline points
-	private ArrayList<Shape> 			shapes;
+	private ArrayList<Shape> 			shapes;		//keeps track of all of the shapes on the view
+	private CircleInteraction			circlesInteraction;//manages cicles bouncing off of each other
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -71,8 +72,21 @@ public final class View
 		//initialize shapes
 		shapes = new ArrayList<Shape>();
 		
+		//circle interaction
+		circlesInteraction = new CircleInteraction();
+		
 		//test shape
-		shapes.add(new Circle(this));
+		Circle c1 = new Circle(this);
+		c1.center.x = -0.9;
+		c1.velocity.x = 0.005;
+		c1.velocity.y = 0.006; 
+		Circle c2 = new Circle(this);
+		c2.velocity.x = 0.008;
+		c2.velocity.y = 0.007;
+		circlesInteraction.addCircle(c2);
+		circlesInteraction.addCircle(c1);
+		shapes.add(c1);
+		shapes.add(c2);
 	}
 
 	//**********************************************************************
@@ -207,6 +221,9 @@ public final class View
 		for (Shape s : shapes){
 			s.update(drawable);
 		}
+		
+		circlesInteraction.update();
+		
 		canvas.repaint();
 
 	}
