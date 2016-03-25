@@ -45,7 +45,7 @@ public final class View
 	private Point2D.Double				cursor;		// Current cursor coordinates
 	private ArrayList<Point2D.Double>	points;		// User's polyline points
 	private ArrayList<Shape> 			shapes;		//keeps track of all of the shapes on the view
-	private CircleInteraction			circlesInteraction;//manages cicles bouncing off of each other
+	private ArrayList<Interaction>		shapeInteractions;//keeps track of interactions between shapes
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -72,8 +72,10 @@ public final class View
 		//initialize shapes
 		shapes = new ArrayList<Shape>();
 		
-		//circle interaction
-		circlesInteraction = new CircleInteraction();
+		//interactions
+		shapeInteractions = new ArrayList<Interaction>();
+		
+		CircleInteraction circlesInteraction = new CircleInteraction();
 		
 		//test shape
 		Circle c1 = new Circle(this);
@@ -85,8 +87,13 @@ public final class View
 		c2.velocity.y = 0.007;
 		circlesInteraction.addCircle(c2);
 		circlesInteraction.addCircle(c1);
+		
+		//add to shapes
 		shapes.add(c1);
 		shapes.add(c2);
+		
+		//add to interactions
+		shapeInteractions.add(circlesInteraction);
 	}
 
 	//**********************************************************************
@@ -218,8 +225,10 @@ public final class View
 	{
 		counter++;								// Counters are useful, right?
 		
-		circlesInteraction.update();
-
+		//update the interactions
+		for(Interaction i : shapeInteractions){
+			i.update();
+		}
 		
 		//update the shapes
 		for (Shape s : shapes){

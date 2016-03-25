@@ -8,7 +8,7 @@ import java.util.Set;
  * @author JeremyLittel
  *
  */
-public class CircleInteraction {
+public class CircleInteraction implements Interaction{
 	protected ArrayList<Circle> circles;//list of all of the circles
 	
 	/**

@@ -37,14 +37,35 @@ public class Circle extends Shape {
 	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
-		drawCircle(gl);
+		drawCircle(gl, radius, 54,253,17);
+		drawCircle(gl, radius*.9, 0,0,0);
+
 	}
 	
+	/**
+	 * 	Draws a circle at the shape's center given a gl radius and color
+	 * @param gl
+	 * @param radius
+	 * @param red
+	 * @param green
+	 * @param blue
+	 */
+	protected void drawCircle(GL2 gl, double radius, double red, double green, double blue){
+		drawCircle(gl, radius, red, green, blue, 255.0);
+	}
 	
-	//private methods
-	private void drawCircle(GL2 gl){
+	/**
+	 * Draws a circle at the shape's center given a gl radius and color
+	 * @param gl
+	 * @param radius
+	 * @param red
+	 * @param green
+	 * @param blue
+	 * @param alpha
+	 */
+	protected void drawCircle(GL2 gl, double radius, double red, double green, double blue, double alpha){
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		setColor(gl, 54, 253, 17);
+		setColor(gl, red, green, blue, alpha);
 		gl.glVertex2d(center.x, center.y);
 		
 		for (int i=0; i<=32; i++)
@@ -56,19 +77,6 @@ public class Circle extends Shape {
 		}
 		gl.glEnd();
 		
-		//make more of a ring
-		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		setColor(gl, 0, 0, 0);
-		gl.glVertex2d(center.x, center.y);
-		
-		for (int i=0; i<=32; i++)
-		{
-			double a = (2.0 * Math.PI) * (i / 32.0);
-			double x = center.x + convertWidth(radius*.9) * Math.cos(a);
-			double y = center.y + convertHeight(radius*.9) * Math.sin(a);
-			gl.glVertex2d(x,y);
-		}
-		gl.glEnd();
 	}
 
 	//getters and setters
