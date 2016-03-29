@@ -77,6 +77,15 @@ public final class View
 		
 		CircleInteraction circlesInteraction = new CircleInteraction();
 		
+		//Rink
+		Wall w1 = new Wall(this);
+		w1.center.x = 0;
+		w1.center.y = 0;
+		w1.velocity.x = 0;
+		w1.velocity.y = 0;
+		
+		shapes.add(w1);
+		
 		//test shape
 		Circle c1 = new Circle(this);
 		c1.center.x = -0.9;

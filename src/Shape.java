@@ -10,14 +10,14 @@ import com.jogamp.opengl.glu.gl2.*;
  *
  */
 public class Shape {
-	//intance variables
+	//Instance variables
 	protected View view;//pointer to the view
 	protected Point2D.Double center;//center position of the shape
 	protected Point2D.Double velocity;//velocity of the shape
 	protected Point2D.Double acceleration;//acceleration of the shape
 
 	/**
-	 * Constuct a new shape with a reference to a view's gl
+	 * Construct a new shape with a reference to a view's gl
 	 * @param nGL
 	 */
 	public Shape(View nView) {
