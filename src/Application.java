@@ -21,8 +21,18 @@ public final class Application
 	// Public Class Members
 	//**********************************************************************
 
-	public static final Rectangle	DEFAULT_BOUNDS =
-		new Rectangle(50, 50, 1000, 500);
+	
+	/**
+	 * Change TableHeight to change your window size. 
+	 * These vars ensure that the standard dimensions of an air hockey table are kept.
+	 * 
+	 * @author tremc_000
+	 */
+	public static final int			TableHeight		= 1000;
+	public static final double		TableWidthMult	= 1.8;
+	
+	public static final Rectangle	DEFAULT_BOUNDS	=
+		new Rectangle(50, 50, (int)(TableHeight * TableWidthMult), TableHeight);
 
 	//**********************************************************************
 	// Main
