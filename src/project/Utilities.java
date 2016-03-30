@@ -1,4 +1,8 @@
-import java.awt.event.*;
+package project;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 
 //******************************************************************************
 
@@ -8,6 +12,27 @@ import java.awt.event.*;
  */
 public final class Utilities
 {
+	// Use this to load images
+	private Image	fullyLoadImage(String filename)
+	{
+		Image	image = null;
+
+		// Catch some exceptions
+		try
+		{
+			// Load an image file into an image object
+			image = Toolkit.getDefaultToolkit().createImage(filename);
+		}
+		catch (Exception ex)
+		{
+			System.err.println("that wasn't supposed to happen");
+			ex.printStackTrace();
+			System.exit(1);
+		}
+
+		return image;
+	}
+
 	//**********************************************************************
 	// Public Class Methods (Event Handling)
 	//**********************************************************************
