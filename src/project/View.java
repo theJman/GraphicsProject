@@ -1,11 +1,17 @@
-import java.awt.*;
-import java.awt.geom.*;
+package project;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
-import java.util.*;
-import com.jogamp.opengl.*;
-import com.jogamp.opengl.awt.*;
-import com.jogamp.opengl.glu.*;
-import com.jogamp.opengl.util.*;
+import java.util.ArrayList;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.awt.GLJPanel;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 //******************************************************************************
@@ -68,39 +74,48 @@ public final class View
 		// Initialize interaction
 		keyHandler = new KeyHandler(this);
 		mouseHandler = new MouseHandler(this);
-		
+
 		//initialize shapes
 		shapes = new ArrayList<Shape>();
-		
+
 		//interactions
 		shapeInteractions = new ArrayList<Interaction>();
-		
+
 		CircleInteraction circlesInteraction = new CircleInteraction();
-		
-		//Rink
+
+		// Wall
 		Wall w1 = new Wall(this);
 		w1.center.x = 0;
 		w1.center.y = 0;
 		w1.velocity.x = 0;
 		w1.velocity.y = 0;
-		
+
 		shapes.add(w1);
-		
+
+		// Playing field
+		Field field = new Field(this);
+		field.center.x = 0;
+		field.center.y = 0;
+		field.velocity.x = 0;
+		field.velocity.y = 0;
+
+		shapes.add(field);
+
 		//test shape
 		Circle c1 = new Circle(this);
 		c1.center.x = -0.9;
 		c1.velocity.x = 0.005;
-		c1.velocity.y = 0.006; 
+		c1.velocity.y = 0.006;
 		Circle c2 = new Circle(this);
 		c2.velocity.x = 0.008;
 		c2.velocity.y = 0.007;
 		circlesInteraction.addCircle(c2);
 		circlesInteraction.addCircle(c1);
-		
+
 		//add to shapes
 		shapes.add(c1);
 		shapes.add(c2);
-		
+
 		//add to interactions
 		shapeInteractions.add(circlesInteraction);
 	}
@@ -152,19 +167,19 @@ public final class View
 	//**********************************************************************
 	// Mouse movement
 	//**********************************************************************
-	
+
 	public void mousePressed(Point2D.Double p){
-		
+
 	}
-	
+
 	public void mouseDrag(Point2D.Double p){
-		
+
 	}
-	
+
 	public void mouseRelease(Point2D.Double p){
-		
+
 	}
-	
+
 
 	//**********************************************************************
 	// Public Methods
@@ -172,13 +187,14 @@ public final class View
 
 	public Component	getComponent()
 	{
-		return (Component)canvas;
+		return canvas;
 	}
 
 	//**********************************************************************
 	// Override Methods (GLEventListener)
 	//**********************************************************************
 
+	@Override
 	public void		init(GLAutoDrawable drawable)
 	{
 		w = drawable.getSurfaceWidth();
@@ -188,11 +204,13 @@ public final class View
 									true, true);
 	}
 
+	@Override
 	public void		dispose(GLAutoDrawable drawable)
 	{
 		renderer = null;
 	}
 
+	@Override
 	public void		display(GLAutoDrawable drawable)
 	{
 		updateProjection(drawable);
@@ -201,6 +219,7 @@ public final class View
 		render(drawable);
 	}
 
+	@Override
 	public void		reshape(GLAutoDrawable drawable, int x, int y, int w, int h)
 	{
 		this.w = w;
@@ -233,18 +252,18 @@ public final class View
 	private void	update(GLAutoDrawable drawable)
 	{
 		counter++;								// Counters are useful, right?
-		
+
 		//update the interactions
 		for(Interaction i : shapeInteractions){
 			i.update();
 		}
-		
+
 		//update the shapes
 		for (Shape s : shapes){
 			s.update(drawable);
 		}
-		
-		
+
+
 		canvas.repaint();
 
 	}
@@ -254,12 +273,12 @@ public final class View
 		GL2		gl = drawable.getGL().getGL2();
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);		// Clear the buffer
-		
+
 		//render all of the shapes
 		for (Shape s : shapes) {
 			s.render(drawable);
 		}
-		
+
 		drawBounds(gl);							// Unit bounding box
 		drawAxes(gl);							// X and Y axes
 		drawCursor(gl);							// Crosshairs at mouse location
@@ -357,5 +376,7 @@ public final class View
 		gl.glEnd();
 	}
 }
+
+
 
 //******************************************************************************
