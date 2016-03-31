@@ -1,5 +1,8 @@
+package Shapes;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+
+import Base.View;
 
 /**
  * 

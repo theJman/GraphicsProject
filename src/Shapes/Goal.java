@@ -1,3 +1,6 @@
+package Shapes;
+import Base.View;
+
 /**
  * 
  */

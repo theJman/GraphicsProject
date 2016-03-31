@@ -1,3 +1,4 @@
+package Shapes;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +46,6 @@ public class CircleInteraction implements Interaction{
 						Point2D.Double center2 = c2.getCenterNotInView();
 						
 						
-						
 						//find distance between
 						double distance = center1.distance(center2);
 						if(distance <= c1.getRadius()/2 + c2.getRadius()/2){
@@ -86,8 +86,8 @@ public class CircleInteraction implements Interaction{
 							c2.setVelocityToInView(vectorAdd(v2n, v2t));
 							
 							//use the cantBounceTick to prevent sticking together
-							c1.cantBounceTick = 10;
-							c2.cantBounceTick = 10;
+							c1.cantBounceTick = 15;
+							c2.cantBounceTick = 15;
 							
 							//we don't need to do anything with this cicles again on this bounce
 							alreadyUpdatedCircles.add(c2);

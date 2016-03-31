@@ -1,7 +1,10 @@
-package project;
+package Shapes;
+
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+
+import Base.View;
 
 /**
  * This class will just be the build of the playing field. It will be purely for aesthetic purposes.

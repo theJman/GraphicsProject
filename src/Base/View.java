@@ -1,3 +1,4 @@
+package Base;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -13,6 +14,13 @@ import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
+
+import Shapes.Circle;
+import Shapes.CircleInteraction;
+import Shapes.Field;
+import Shapes.Interaction;
+import Shapes.Shape;
+import Shapes.Wall;
 
 //******************************************************************************
 
@@ -85,30 +93,30 @@ public final class View
 
 		// Wall
 		Wall w1 = new Wall(this);
-		w1.center.x = 0;
-		w1.center.y = 0;
-		w1.velocity.x = 0;
-		w1.velocity.y = 0;
+		w1.getCenter().x = 0;
+		w1.getCenter().y = 0;
+		w1.getVelocity().x = 0;
+		w1.getVelocity().y = 0;
 
 		shapes.add(w1);
 
 		// Playing field
 		Field field = new Field(this);
-		field.center.x = 0;
-		field.center.y = 0;
-		field.velocity.x = 0;
-		field.velocity.y = 0;
+		field.getCenter().x = 0;
+		field.getCenter().y = 0;
+		field.getVelocity().x = 0;
+		field.getVelocity().y = 0;
 
 		shapes.add(field);
 
 		//test shape
 		Circle c1 = new Circle(this);
-		c1.center.x = -0.9;
-		c1.velocity.x = 0.005;
-		c1.velocity.y = 0.006;
+		c1.getCenter().x = -0.8;
+		c1.getVelocity().x = 0.008;
+		c1.getVelocity().y = 0.01;
 		Circle c2 = new Circle(this);
-		c2.velocity.x = 0.008;
-		c2.velocity.y = 0.007;
+		c2.getVelocity().x = -0.01;
+		c2.getVelocity().y = 0.009;
 		circlesInteraction.addCircle(c2);
 		circlesInteraction.addCircle(c1);
 
