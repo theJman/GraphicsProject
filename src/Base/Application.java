@@ -29,7 +29,7 @@ public final class Application
 	 * 
 	 * @author tremc_000
 	 */
-	public static final int			TableHeight		= 600;
+	public static final int			TableHeight		= 500;
 	public static final double		TableWidthMult	= 1.8;
 	
 	public static final Rectangle	DEFAULT_BOUNDS	=

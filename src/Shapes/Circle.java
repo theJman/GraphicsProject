@@ -1,5 +1,6 @@
 package Shapes;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -22,12 +23,14 @@ public class Circle extends Shape {
 	protected double radius = 100;
 	protected int cantBounceTick = 0;//only can bounce when this is 0. Added so cicles cannot stick together!:)
 	
+	protected ArrayList<Edge> edges;
+	
 	/**
 	 * @param nView
 	 */
 	public Circle(View nView) {
 		super(nView);
-		
+		edges = new ArrayList<Edge>();
 	}
 	
 	public void update(GLAutoDrawable drawable){
@@ -73,12 +76,14 @@ public class Circle extends Shape {
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		setColor(gl, red, green, blue, alpha);
 		gl.glVertex2d(center.x, center.y);
+		ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
 		
 		for (int i=0; i<=32; i++)
 		{
 			double a = (2.0 * Math.PI) * (i / 32.0);
 			double x = center.x + convertWidth(radius) * Math.cos(a);
 			double y = center.y + convertHeight(radius) * Math.sin(a);
+			points.add(new Point2D.Double(x, y));
 			gl.glVertex2d(x,y);
 		}
 		gl.glEnd();

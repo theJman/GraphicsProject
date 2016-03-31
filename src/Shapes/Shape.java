@@ -99,6 +99,17 @@ public class Shape {
 		return new Point2D.Double(vx, vy);
 	}
 	
+	public void setCenterNotInView(Point2D.Double c){
+		int				w = view.getWidth();
+		int				h = view.getHeight();
+		Point2D.Double	p = view.getOrigin();
+		double			cx = p.x + (c.x * 2.0) / w - 1.0;
+		double			cy = p.y - (c.y * 2.0) / h + 1.0;
+
+		center.x = cx;
+		center.y = cy;
+	}
+	
 	public Point2D.Double getVelocityNotInView(){
 		int				w = view.getWidth();
 		int				h = view.getHeight();

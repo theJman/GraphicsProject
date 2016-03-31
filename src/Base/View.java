@@ -112,11 +112,11 @@ public final class View
 		//test shape
 		Circle c1 = new Circle(this);
 		c1.getCenter().x = -0.8;
-		c1.getVelocity().x = 0.008;
-		c1.getVelocity().y = 0.01;
+		c1.getVelocity().x = 0.005;
+		c1.getVelocity().y = 0.0005;
 		Circle c2 = new Circle(this);
-		c2.getVelocity().x = -0.01;
-		c2.getVelocity().y = 0.009;
+		c2.getVelocity().x = -0.005;
+		c2.getVelocity().y = 0.00005;
 		circlesInteraction.addCircle(c2);
 		circlesInteraction.addCircle(c1);
 
@@ -177,7 +177,10 @@ public final class View
 	//**********************************************************************
 
 	public void mousePressed(Point2D.Double p){
-
+		for (Shape s : shapes){
+			s.getVelocity().x *= 1.5;
+			s.getVelocity().y *= 1.5;
+		}
 	}
 
 	public void mouseDrag(Point2D.Double p){
