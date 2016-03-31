@@ -1,4 +1,5 @@
 package Shapes;
+import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,6 +50,10 @@ public class CircleInteraction implements Interaction{
 						double distance = center1.distance(center2);
 
 						if(distance <= c1.getRadius()/2 + c2.getRadius()/2){
+							
+							//Adds a beep on collision. We can make this a better sound later.
+							Toolkit.getDefaultToolkit().beep();
+							
 							//now move the circles so that they are not touching
 							boolean stillTouching = true;
 							while(stillTouching){
