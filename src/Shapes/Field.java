@@ -34,7 +34,14 @@ public class Field extends Shape{
 	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
-		drawField(gl,255,255,255);
+		if(View.neonMode)
+		{
+			drawField(gl,0,0,0);
+		}
+		else
+		{
+			drawField(gl,255,255,255);
+		}
 		drawLines(gl);
 		drawCircles(gl);
 		drawLinesInCircles(gl);
@@ -62,14 +69,28 @@ public class Field extends Shape{
 		gl.glLineWidth(50f);
 		gl.glBegin(GL2.GL_LINES);
 			// Center line
-			setColor(gl,255,0,0);
+			if(View.neonMode)
+			{
+				setColor(gl,View.globR,View.globG,View.globB);
+			}
+			else
+			{
+				setColor(gl,255,0,0);
+			}
 			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*percentHeight));
 			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*-percentHeight));
 
 			// TODO some math issues here, I'm wanting to divide this into thirds essentially
 			// TODO it's late and i'm not getting the math right.
 			// Left and right lines
-			setColor(gl,0,0,255);
+			if(View.neonMode)
+			{
+				setColor(gl,View.globR,View.globG,View.globB);
+			}
+			else
+			{
+				setColor(gl,68,214,243);
+			}
 			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight));
 			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*-percentHeight));
 			gl.glVertex2d(convertWidth(view.getWidth()*(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight));
@@ -83,12 +104,23 @@ public class Field extends Shape{
 
 		double x = convertWidth(view.getWidth()*(1.0/1.75));
 		double y = convertHeight(view.getHeight()*(1.0/2));
-
-		drawCircle(gl,radius,0,0,255,0,0);		// Center circle
-		drawCircle(gl,radius*.7,-x,y,255,0,0);		// Left top circle
-		drawCircle(gl,radius*.7,x,y,255,0,0);		// Right top circle
-		drawCircle(gl,radius*.7,-x,-y,255,0,0);		// Left bottom circle
-		drawCircle(gl,radius*.7,x,-y,255,0,0);		// Right bottom circle
+		if(View.neonMode)
+		{
+			drawCircle(gl,radius,0,0,View.globR,View.globG,View.globB);		// Center circle
+			drawCircle(gl,radius*.7,-x,y,View.globR,View.globG,View.globB);		// Left top circle
+			drawCircle(gl,radius*.7,x,y,View.globR,View.globG,View.globB);		// Right top circle
+			drawCircle(gl,radius*.7,-x,-y,View.globR,View.globG,View.globB);		// Left bottom circle
+			drawCircle(gl,radius*.7,x,-y,View.globR,View.globG,View.globB);		// Right bottom circle
+		}
+		else
+		{
+			drawCircle(gl,radius,0,0,255,0,0);		// Center circle
+			drawCircle(gl,radius*.7,-x,y,255,0,0);		// Left top circle
+			drawCircle(gl,radius*.7,x,y,255,0,0);		// Right top circle
+			drawCircle(gl,radius*.7,-x,-y,255,0,0);		// Left bottom circle
+			drawCircle(gl,radius*.7,x,-y,255,0,0);		// Right bottom circle
+		}
+		
 
 	}
 
@@ -112,7 +144,14 @@ public class Field extends Shape{
 
 		// White it out
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
-		setColor(gl, 255, 255, 255);
+		if(View.neonMode)
+		{
+			setColor(gl,0,0,0);
+		}
+		else
+		{
+			setColor(gl,255,255,255);
+		}
 		gl.glVertex2d(centerX, centerY);
 		for (int i=0; i<=32; i++)
 		{
