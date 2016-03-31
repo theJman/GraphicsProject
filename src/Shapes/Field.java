@@ -14,8 +14,8 @@ import Base.View;
  */
 public class Field extends Shape {
 
-	protected double percentHeight = .95;
-	protected double percentWidth = .95;
+	protected double percentHeight = 1.0;
+	protected double percentWidth = 1.0;
 	protected double radius = (percentHeight*percentWidth)/.00275;
 
 	/**
