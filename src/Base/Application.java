@@ -29,11 +29,13 @@ public final class Application
 	 * 
 	 * @author tremc_000
 	 */
-	public static final int			TableHeight		= 500;
+	public static final int			TableHeight		= 1000;
 	public static final double		TableWidthMult	= 1.8;
 	
 	public static final Rectangle	DEFAULT_BOUNDS	=
 		new Rectangle(50, 50, (int)(TableHeight * TableWidthMult), TableHeight);
+	
+	public static		int			numCircles		= 0;
 
 	//**********************************************************************
 	// Main
@@ -46,6 +48,11 @@ public final class Application
 		//GLCanvas		canvas = new GLCanvas(capabilities);
 		GLJPanel		canvas = new GLJPanel(capabilities);
 		JFrame			frame = new JFrame("Application");
+		
+		System.out.println("Please enter the number of pucks that you want.");
+		Scanner reader = new Scanner(System.in);
+		numCircles = reader.nextInt();
+		reader.close();
 
 		frame.setBounds(DEFAULT_BOUNDS);
 		frame.getContentPane().add(canvas);
@@ -57,7 +64,7 @@ public final class Application
 					System.exit(0);
 				}
 			});
-
+		
 		View			view = new View(canvas);
 	}
 }

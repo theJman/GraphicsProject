@@ -109,8 +109,19 @@ public final class View
 
 		shapes.add(field);
 
+		for(int i=0; i < Application.numCircles; i++)
+		{
+			Circle newPuck = new Circle(this);
+			newPuck.getCenter().x = (Math.random()*2)-1;
+			newPuck.getCenter().y = (Math.random()*2)-1;
+			newPuck.getVelocity().x = -0.005;
+			newPuck.getVelocity().y = -0.0005;
+			circlesInteraction.addCircle(newPuck);
+			shapes.add(newPuck);
+		}
+		
 		//test shape
-		Circle c1 = new Circle(this);
+		/*Circle c1 = new Circle(this);
 		c1.getCenter().x = -0.8;
 		c1.getVelocity().x = -0.005;
 		c1.getVelocity().y = 0.0005;
@@ -118,11 +129,11 @@ public final class View
 		c2.getVelocity().x = -0.005;
 		c2.getVelocity().y = 0.00005;
 		circlesInteraction.addCircle(c2);
-		circlesInteraction.addCircle(c1);
+		circlesInteraction.addCircle(c1);*/
 
 		//add to shapes
-		shapes.add(c1);
-		shapes.add(c2);
+		/*shapes.add(c1);
+		shapes.add(c2);*/
 
 		//add to interactions
 		shapeInteractions.add(circlesInteraction);
