@@ -92,29 +92,29 @@ public class CircleInteraction implements Interaction{
 							Point2D.Double v1 = new Point2D.Double(c1.getVelocityNotInView().x, c1.getVelocityNotInView().y);
 							Point2D.Double v2 = new Point2D.Double(c2.getVelocityNotInView().x, c2.getVelocityNotInView().y);
 							//velocity unit and tangent vectors
-							Point2D.Double v1n = dotProduct(nUnit, v1);
-							Point2D.Double v1t = dotProduct(tUnit, v1);
-							Point2D.Double v2n = dotProduct(nUnit, v2);
-							Point2D.Double v2t = dotProduct(tUnit, v2);
+							double v1n = dotProduct(nUnit, v1);
+							double v1t = dotProduct(tUnit, v1);
+							double v2n = dotProduct(nUnit, v2);
+							double v2t = dotProduct(tUnit, v2);
 							//dummy mass in case we ever want to change these
-							double m1 = 10, m2 = 10;
+							double m1 = 1, m2 = 1;
 							//calculate new normal velocities
-							Point2D.Double v1nCopy = dotProduct(nUnit, v1);
-							v1n.x = (v1n.x*(m1-m2) + 2*m2*v2n.x)/(m1+m2);
-							v1n.y = (v1n.y*(m1-m2) + 2*m2*v2n.y)/(m1+m2);
-
-							v2n.x = (v2n.x*(m2-m1) + 2*m1*v1nCopy.x)/(m1+m2);
-							v2n.y = (v2n.y*(m2-m1) + 2*m1*v1nCopy.y)/(m1+m2);
+							double v1nP = (v1n*(m1-m2) + 2*m2*v2n)/(m1+m2);
+							double v2nP = (v2n*(m2-m1) + 2*m1*v1n)/(m1+m2);
+							
+							double v1tP = v1t;
+							double v2tP = v2t;
 							
 							//calculate final unit and tangent velocities
-							v1n = dotProduct(v1n, nUnit);
-							v1t = dotProduct(v1t, tUnit);
-							v2n = dotProduct(v2n, nUnit);
-							v2t = dotProduct(v2t, tUnit);
+							
+							Point2D.Double v1nPV = Edge.scalerMult(nUnit, v1nP);
+							Point2D.Double v1tPV = Edge.scalerMult(tUnit, v1tP); 
+							Point2D.Double v2nPV = Edge.scalerMult(nUnit, v2nP); 
+							Point2D.Double v2tPV = Edge.scalerMult(tUnit, v2tP); 
 							
 							//final velocities
-							c1.setVelocityToInView(vectorAdd(v1n, v1t));
-							c2.setVelocityToInView(vectorAdd(v2n, v2t));
+							c1.setVelocityToInView(vectorAdd(v1nPV, v1tPV));
+							c2.setVelocityToInView(vectorAdd(v2nPV, v2tPV));
 							
 							//use the cantBounceTick to prevent sticking together
 //							c1.cantBounceTick = 40;
@@ -148,8 +148,8 @@ public class CircleInteraction implements Interaction{
 	 * @param v2
 	 * @return
 	 */
-	public Point2D.Double dotProduct(Point2D.Double v1, Point2D.Double v2){
-		return new Point2D.Double(v1.x*v2.x, v1.y*v2.y);
+	public double dotProduct(Point2D.Double v1, Point2D.Double v2){
+		return v1.x*v2.x + v1.y*v2.y;
 	}
 	
 	public Point2D.Double vectorAdd(Point2D.Double v1, Point2D.Double v2){

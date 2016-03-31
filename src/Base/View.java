@@ -112,7 +112,7 @@ public final class View
 		//test shape
 		Circle c1 = new Circle(this);
 		c1.getCenter().x = -0.8;
-		c1.getVelocity().x = 0.005;
+		c1.getVelocity().x = -0.005;
 		c1.getVelocity().y = 0.0005;
 		Circle c2 = new Circle(this);
 		c2.getVelocity().x = -0.005;

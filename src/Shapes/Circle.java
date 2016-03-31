@@ -35,11 +35,22 @@ public class Circle extends Shape {
 	
 	public void update(GLAutoDrawable drawable){
 		super.update(drawable);
-		if (center.x + convertWidth(radius) > 1.0 || center.x - convertWidth(radius) < -1.0) {
+		if (center.x + convertWidth(radius) > 1.0) {
 			velocity.x *= -1;
+			center.x -= center.x + convertWidth(radius) - 1.0;
 		}
-		if (center.y + convertHeight(radius) > 1.0 || center.y - convertHeight(radius) < -1.0) {
+		else if(center.x - convertWidth(radius) < -1.0){
+			velocity.x *= -1;
+			center.x -= center.x - convertWidth(radius) + 1.0;
+		}
+		if (center.y + convertHeight(radius) > 1.0 ) {
 			velocity.y *= -1;
+			center.y -= center.y + convertHeight(radius) - 1.0;
+		}
+		else if( center.y - convertHeight(radius) < -1.0){
+			velocity.y *= -1;
+			center.y -= center.y - convertHeight(radius) + 1.0;
+
 		}
 	}
 	
