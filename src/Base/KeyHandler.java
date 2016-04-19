@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 
+import Shapes.Circle;
+
 //******************************************************************************
 
 /**
@@ -72,6 +74,15 @@ public final class KeyHandler extends KeyAdapter
 
 			case KeyEvent.VK_NUMPAD9:
 				p.x += a;	p.y += a;	break;
+				
+			case KeyEvent.VK_N:
+				View.neonMode = !View.neonMode; break;
+				
+			case KeyEvent.VK_MINUS:
+				view.deleteCircle();	break;
+				
+			case KeyEvent.VK_EQUALS:
+				view.addCircle();	break;
 
 			case KeyEvent.VK_DELETE:
 				view.clear();
