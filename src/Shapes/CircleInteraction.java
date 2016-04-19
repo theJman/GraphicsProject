@@ -28,6 +28,11 @@ public class CircleInteraction implements Interaction{
 		circles.add(c);
 	}
 	
+	public void deleteCircle(){
+		circles.remove(circles.size()-1);
+		circles.trimToSize();
+	}
+	
 	/**
 	 * Performs updates on circles if they need to interact with each other
 	 */

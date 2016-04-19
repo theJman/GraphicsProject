@@ -57,7 +57,15 @@ public class Circle extends Shape {
 	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
-		drawCircle(gl, radius, 54,253,17);
+		if(View.neonMode)
+		{
+			drawCircle(gl, radius, View.globR,View.globG,View.globB);
+		}
+		else
+		{
+			drawCircle(gl, radius, 0,255,0);
+		}
+		
 		drawCircle(gl, radius*.9, 0,0,0);
 
 	}

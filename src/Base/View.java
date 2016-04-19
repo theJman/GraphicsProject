@@ -37,6 +37,15 @@ public final class View
 
 	public static final int				DEFAULT_FRAMES_PER_SECOND = 60;
 	private static final DecimalFormat	FORMAT = new DecimalFormat("0.000");
+	
+	public static boolean neonMode;
+	
+	public static int globR;
+		public static boolean globRInc = true;
+	public static int globG;
+		public static boolean globGInc = true;
+	public static int globB;
+		public static boolean globBInc = true;
 
 	//**********************************************************************
 	// Private Members
@@ -60,6 +69,7 @@ public final class View
 	private ArrayList<Point2D.Double>	points;		// User's polyline points
 	private ArrayList<Shape> 			shapes;		//keeps track of all of the shapes on the view
 	private ArrayList<Interaction>		shapeInteractions;//keeps track of interactions between shapes
+	private CircleInteraction 			circlesInteraction;
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -83,13 +93,18 @@ public final class View
 		keyHandler = new KeyHandler(this);
 		mouseHandler = new MouseHandler(this);
 
+		neonMode = false;
+		globR = 100;
+		globG = 175;
+		globB = 255;
+		
 		//initialize shapes
 		shapes = new ArrayList<Shape>();
 
 		//interactions
 		shapeInteractions = new ArrayList<Interaction>();
 
-		CircleInteraction circlesInteraction = new CircleInteraction();
+		circlesInteraction = new CircleInteraction();
 
 		// Wall
 		Wall w1 = new Wall(this);
@@ -235,6 +250,8 @@ public final class View
 	@Override
 	public void		display(GLAutoDrawable drawable)
 	{
+		updateColor();
+		System.out.println("R: " + globR + " G: " + globG + " B: " + globB);
 		updateProjection(drawable);
 
 		update(drawable);
@@ -301,11 +318,11 @@ public final class View
 			s.render(drawable);
 		}
 
-		drawBounds(gl);							// Unit bounding box
-		drawAxes(gl);							// X and Y axes
-		drawCursor(gl);							// Crosshairs at mouse location
-		drawCursorCoordinates(drawable);		// Draw some text
-		drawPolyline(gl);						// Draw the user's sketch
+//		drawBounds(gl);							// Unit bounding box
+//		drawAxes(gl);							// X and Y axes
+//		drawCursor(gl);							// Crosshairs at mouse location
+//		drawCursorCoordinates(drawable);		// Draw some text
+//		drawPolyline(gl);						// Draw the user's sketch
 	}
 
 	//**********************************************************************
@@ -396,6 +413,88 @@ public final class View
 			gl.glVertex2d(p.x, p.y);
 
 		gl.glEnd();
+	}
+	
+	/**
+	 * Adds a new puck
+	 *
+	 * @author TreMcP
+	 */
+	public void addCircle(){
+		Circle newPuck = new Circle(this);
+		newPuck.getCenter().x = (Math.random()*2)-1;
+		newPuck.getCenter().y = (Math.random()*2)-1;
+		newPuck.getVelocity().x = -0.005;
+		newPuck.getVelocity().y = -0.0005;
+		circlesInteraction.addCircle(newPuck);
+		shapes.add(newPuck);
+	}
+	
+	/**
+	 * Subtracts a puck
+	 *
+	 * @author TreMcP
+	 */
+	public void deleteCircle(){
+		circlesInteraction.deleteCircle();
+		shapes.remove(shapes.size()-1);
+	}
+	
+	private void updateColor(){
+		
+		if(globR >= 255)
+		{
+			globRInc = false;
+		}
+		else if(globR <= 100)
+		{
+			globRInc = true;
+		}
+		
+		if(globRInc == true)
+		{
+			globR+=(Math.random() * 5);
+		}
+		else
+		{
+			globR-=(Math.random() * 5);
+		}
+		
+		if(globG >= 255)
+		{
+			globGInc = false;
+		}
+		else if(globG <= 100)
+		{
+			globGInc = true;
+		}
+		
+		if(globGInc == true)
+		{
+			globG+=(Math.random() * 5);
+		}
+		else
+		{
+			globG-=(Math.random() * 5);
+		}
+		
+		if(globB >= 255)
+		{
+			globBInc = false;
+		}
+		else if(globB <= 100)
+		{
+			globBInc = true;
+		}
+		
+		if(globBInc == true)
+		{
+			globB+=(Math.random() * 5);
+		}
+		else
+		{
+			globB-=(Math.random() * 5);
+		}
 	}
 }
 

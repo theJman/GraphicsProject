@@ -49,10 +49,12 @@ public final class Application
 		GLJPanel		canvas = new GLJPanel(capabilities);
 		JFrame			frame = new JFrame("Application");
 		
-		System.out.println("Please enter the number of pucks that you want.");
+		/*System.out.println("Please enter the number of pucks that you want.");
 		Scanner reader = new Scanner(System.in);
 		numCircles = reader.nextInt();
-		reader.close();
+		reader.close();*/
+		
+		numCircles = 1;
 
 		frame.setBounds(DEFAULT_BOUNDS);
 		frame.getContentPane().add(canvas);
