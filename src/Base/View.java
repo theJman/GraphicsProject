@@ -21,6 +21,7 @@ import Shapes.Field;
 import Shapes.Interaction;
 import Shapes.Shape;
 import Shapes.Wall;
+import Shapes.WallInteraction;
 
 //******************************************************************************
 
@@ -70,6 +71,7 @@ public final class View
 	private ArrayList<Shape> 			shapes;		//keeps track of all of the shapes on the view
 	private ArrayList<Interaction>		shapeInteractions;//keeps track of interactions between shapes
 	private CircleInteraction 			circlesInteraction;
+	private WallInteraction				wallInteraction; //circles interaction with walls
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -93,7 +95,7 @@ public final class View
 		keyHandler = new KeyHandler(this);
 		mouseHandler = new MouseHandler(this);
 
-		neonMode = false;
+		neonMode = true;
 		globR = 100;
 		globG = 175;
 		globB = 255;
@@ -113,7 +115,8 @@ public final class View
 		w1.getVelocity().x = 0;
 		w1.getVelocity().y = 0;
 
-		shapes.add(w1);
+		//wall interactions
+		wallInteraction = new WallInteraction(w1);
 
 		// Playing field
 		Field field = new Field(this);
@@ -124,16 +127,21 @@ public final class View
 
 		shapes.add(field);
 
+		shapes.add(w1);
+
 		for(int i=0; i < Application.numCircles; i++)
 		{
 			Circle newPuck = new Circle(this);
-			newPuck.getCenter().x = (Math.random()*2)-1;
-			newPuck.getCenter().y = (Math.random()*2)-1;
+			newPuck.getCenter().x = (Math.random()*1.5)-1;
+			newPuck.getCenter().y = (Math.random()*1.5)-1;
 			newPuck.getVelocity().x = -0.005;
 			newPuck.getVelocity().y = -0.0005;
 			circlesInteraction.addCircle(newPuck);
+			wallInteraction.addCircle(newPuck);
 			shapes.add(newPuck);
 		}
+		
+		
 		
 		//test shape
 		/*Circle c1 = new Circle(this);
@@ -152,6 +160,7 @@ public final class View
 
 		//add to interactions
 		shapeInteractions.add(circlesInteraction);
+		shapeInteractions.add(wallInteraction);
 	}
 
 	//**********************************************************************
@@ -251,7 +260,7 @@ public final class View
 	public void		display(GLAutoDrawable drawable)
 	{
 		updateColor();
-		System.out.println("R: " + globR + " G: " + globG + " B: " + globB);
+		//System.out.println("R: " + globR + " G: " + globG + " B: " + globB);
 		updateProjection(drawable);
 
 		update(drawable);

@@ -29,7 +29,7 @@ public final class Application
 	 * 
 	 * @author tremc_000
 	 */
-	public static final int			TableHeight		= 1000;
+	public static final int			TableHeight		= 700;
 	public static final double		TableWidthMult	= 1.8;
 	
 	public static final Rectangle	DEFAULT_BOUNDS	=
@@ -54,7 +54,7 @@ public final class Application
 		numCircles = reader.nextInt();
 		reader.close();*/
 		
-		numCircles = 1;
+		numCircles = 3;
 
 		frame.setBounds(DEFAULT_BOUNDS);
 		frame.getContentPane().add(canvas);

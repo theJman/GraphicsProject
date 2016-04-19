@@ -157,6 +157,16 @@ public class Edge extends Shape {
 	}
 	
 	/**
+	 * Get the unit vector from a vector
+	 * @param v
+	 * @return
+	 */
+	public static Point2D.Double getUnitVector(Point2D.Double v){
+		double mag = getMagnitude(v);
+		return new Point2D.Double(v.x/mag, v.y/mag);
+	}
+	
+	/**
 	 * Render the line
 	 */
 	public void render(GLAutoDrawable drawable){
