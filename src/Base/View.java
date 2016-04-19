@@ -301,11 +301,11 @@ public final class View
 			s.render(drawable);
 		}
 
-		drawBounds(gl);							// Unit bounding box
-		drawAxes(gl);							// X and Y axes
-		drawCursor(gl);							// Crosshairs at mouse location
-		drawCursorCoordinates(drawable);		// Draw some text
-		drawPolyline(gl);						// Draw the user's sketch
+//		drawBounds(gl);							// Unit bounding box
+//		drawAxes(gl);							// X and Y axes
+//		drawCursor(gl);							// Crosshairs at mouse location
+//		drawCursorCoordinates(drawable);		// Draw some text
+//		drawPolyline(gl);						// Draw the user's sketch
 	}
 
 	//**********************************************************************
