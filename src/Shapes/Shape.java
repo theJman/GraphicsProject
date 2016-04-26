@@ -88,6 +88,16 @@ public class Shape {
 	public Point2D.Double getAcceleration(){
 		return acceleration;
 	}
+	
+	/**
+	 * Setter for velocity
+	 * Override if you do not want the velocity to change
+	 * @param v
+	 */
+	public void setVelocity(Point2D.Double v){
+		velocity = v;
+	}
+	
 
 	public Point2D.Double getCenterNotInView(){
 		int				w = view.getWidth();

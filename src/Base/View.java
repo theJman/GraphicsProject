@@ -19,6 +19,9 @@ import Shapes.Circle;
 import Shapes.CircleInteraction;
 import Shapes.Field;
 import Shapes.Interaction;
+import Shapes.InvisiblePuck;
+import Shapes.Mallet;
+import Shapes.Puck;
 import Shapes.Shape;
 import Shapes.Wall;
 import Shapes.WallInteraction;
@@ -72,6 +75,9 @@ public final class View
 	private ArrayList<Interaction>		shapeInteractions;//keeps track of interactions between shapes
 	private CircleInteraction 			circlesInteraction;
 	private WallInteraction				wallInteraction; //circles interaction with walls
+	//the mallets
+	private Mallet						leftMallet;
+	private Mallet						rightMallet;
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -131,9 +137,9 @@ public final class View
 
 		for(int i=0; i < Application.numCircles; i++)
 		{
-			Circle newPuck = new Circle(this);
-			newPuck.getCenter().x = (Math.random()*1.5)-1;
-			newPuck.getCenter().y = (Math.random()*1.5)-1;
+			Puck newPuck = new Puck(this);
+			newPuck.getCenter().x = (Math.random()*1.3)-1;
+			newPuck.getCenter().y = (Math.random()*1.3)-1;
 			newPuck.getVelocity().x = -0.005;
 			newPuck.getVelocity().y = -0.0005;
 			circlesInteraction.addCircle(newPuck);
@@ -141,6 +147,31 @@ public final class View
 			shapes.add(newPuck);
 		}
 		
+		for(int i = 0; i < 2; i++){
+			//create an invisible puck:)
+			InvisiblePuck invisiblePuck = new InvisiblePuck(this);
+			invisiblePuck.getCenter().x = (Math.random()*1.3)-1;
+			invisiblePuck.getCenter().y = (Math.random()*1.3)-1;
+			invisiblePuck.getVelocity().x = -0.005;
+			invisiblePuck.getVelocity().y = -0.0005;
+			circlesInteraction.addCircle(invisiblePuck);
+			wallInteraction.addCircle(invisiblePuck);
+			shapes.add(invisiblePuck);
+		}
+		
+		
+		//init mallets
+		leftMallet = new Mallet(this,true);
+		rightMallet = new Mallet(this,false);
+		
+		shapes.add(leftMallet);
+		shapes.add(rightMallet);
+		circlesInteraction.addCircle(leftMallet);
+		circlesInteraction.addCircle(rightMallet);
+		wallInteraction.addCircle(leftMallet);
+		wallInteraction.addCircle(rightMallet);
+		leftMallet.getCenter().x = -0.6;
+		rightMallet.getCenter().x = 0.6;
 		
 		
 		//test shape
@@ -175,6 +206,13 @@ public final class View
 	public int	getHeight()
 	{
 		return h;
+	}
+	
+	public Mallet getLeftMallet(){
+		return leftMallet;
+	}
+	public Mallet getRightMallet(){
+		return rightMallet;
 	}
 
 	public Point2D.Double	getOrigin()

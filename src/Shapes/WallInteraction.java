@@ -65,7 +65,7 @@ public class WallInteraction implements Interaction {
 					frontPoint.y = c.center.y + c.convertHeight(c.radius) * Math.sin(angle);
 					
 					if(e.isPointOutside(frontPoint)){
-						System.out.println("bounce ball");
+//						System.out.println("bounce ball");
 						//point went outside this edge
 						//double currVelMag = e.getMagnitude(c.velocity);
 						double normaldotv = Edge.dotProduct(e.getNormalUnit(), c.velocity)*1.8;
@@ -80,7 +80,7 @@ public class WallInteraction implements Interaction {
 						c.center.x -= normalMult.x;
 						c.center.y -= normalMult.y;
 						
-						c.velocity = newVel;
+						c.setVelocity(newVel);
 						break;
 					}
 				}

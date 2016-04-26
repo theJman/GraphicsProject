@@ -64,9 +64,9 @@ public class CircleInteraction implements Interaction{
 							while(stillTouching){
 								
 								Point2D.Double vecBetween = new Point2D.Double(center2.x-center1.x, center2.y-center1.y);
-								System.out.println(center1 + " : "+ center2);
-								System.out.println(vecBetween);
-								System.out.println(c1 + " : "+ c2);
+//								System.out.println(center1 + " : "+ center2);
+//								System.out.println(vecBetween);
+//								System.out.println(c1 + " : "+ c2);
 
 								double vecMag = Edge.getMagnitude(vecBetween);
 								double badDistance = Math.abs(c2.getCenterNotInView().distance(c1.getCenterNotInView()) - c1.getRadius()/2 + c2.getRadius()/2);
@@ -76,16 +76,12 @@ public class CircleInteraction implements Interaction{
 								vecBetween.y /= badDistance;
 								center2.x += vecBetween.x;
 								center2.y += vecBetween.y;
-								System.out.println("shifting: "+center2);
-								System.out.println(c2.center);
 								c1.setCenterNotInView(center1);
 								c2.setCenterNotInView(center2);
-								System.out.println(c2.center);
 
 								//check if we need to keep shifting
 								stillTouching = c2.getCenterNotInView().distance(c1.getCenterNotInView()) <= c1.getRadius()/2 + c2.getRadius()/2;
 								if(!stillTouching){
-									System.out.println("Not still touching");
 								}
 							}
 							
@@ -107,7 +103,7 @@ public class CircleInteraction implements Interaction{
 							double v2n = dotProduct(nUnit, v2);
 							double v2t = dotProduct(tUnit, v2);
 							//dummy mass in case we ever want to change these
-							double m1 = 1, m2 = 1;
+							double m1 = c1.mass, m2 = c2.mass;
 							//calculate new normal velocities
 							double v1nP = (v1n*(m1-m2) + 2*m2*v2n)/(m1+m2);
 							double v2nP = (v2n*(m2-m1) + 2*m1*v1n)/(m1+m2);
@@ -126,21 +122,11 @@ public class CircleInteraction implements Interaction{
 							c1.setVelocityToInView(vectorAdd(v1nPV, v1tPV));
 							c2.setVelocityToInView(vectorAdd(v2nPV, v2tPV));
 							
-							//use the cantBounceTick to prevent sticking together
-//							c1.cantBounceTick = 40;
-//							c2.cantBounceTick = 40;
 							
-							//we don't need to do anything with this cicles again on this bounce
+							//we don't need to do anything with these cicles again on this bounce
 							alreadyUpdatedCircles.add(c2);
 							alreadyUpdatedCircles.add(c1);
-							/*
-							c1.velocity.x = 0;
-							c2.velocity.x = 0;
-							c1.velocity.y = 0;
-							c2.velocity.y = 0;
-							c1.cantBounceTick = 400000;
-							c2.cantBounceTick = 400000;
-							*/
+							
 						}
 					
 						

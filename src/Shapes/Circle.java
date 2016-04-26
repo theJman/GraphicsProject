@@ -22,7 +22,7 @@ public class Circle extends Shape {
 
 	protected double radius = 50;
 	protected int cantBounceTick = 0;//only can bounce when this is 0. Added so cicles cannot stick together!:)
-	
+	protected int mass = 1;//default mass
 	
 	//list of all of the points on the circle(used for bouncing it off of the walls)
 	protected ArrayList<Point2D.Double> points;

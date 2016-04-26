@@ -43,38 +43,7 @@ public final class KeyHandler extends KeyAdapter
 		double			a = (Utilities.isShiftDown(e) ? 0.01 : 0.1);
 
 		switch (e.getKeyCode())
-		{
-			case KeyEvent.VK_NUMPAD5:
-				p.x = 0.0;	p.y = 0.0;	break;
-
-			case KeyEvent.VK_NUMPAD4:
-			case KeyEvent.VK_LEFT:
-				p.x -= a;	p.y += 0.0;	break;
-
-			case KeyEvent.VK_NUMPAD6:
-			case KeyEvent.VK_RIGHT:
-				p.x += a;	p.y += 0.0;	break;
-
-			case KeyEvent.VK_NUMPAD2:
-			case KeyEvent.VK_DOWN:
-				p.x += 0.0;	p.y -= a;	break;
-
-			case KeyEvent.VK_NUMPAD8:
-			case KeyEvent.VK_UP:
-				p.x += 0.0;	p.y += a;	break;
-
-			case KeyEvent.VK_NUMPAD1:
-				p.x -= a;	p.y -= a;	break;
-
-			case KeyEvent.VK_NUMPAD7:
-				p.x -= a;	p.y += a;	break;
-
-			case KeyEvent.VK_NUMPAD3:
-				p.x += a;	p.y -= a;	break;
-
-			case KeyEvent.VK_NUMPAD9:
-				p.x += a;	p.y += a;	break;
-				
+		{	
 			case KeyEvent.VK_N:
 				View.neonMode = !View.neonMode; break;
 				
@@ -87,9 +56,72 @@ public final class KeyHandler extends KeyAdapter
 			case KeyEvent.VK_DELETE:
 				view.clear();
 				return;
+				
+				//left mallet movement
+			case KeyEvent.VK_W:
+				view.getLeftMallet().moveUp();
+				break;
+			case KeyEvent.VK_S:
+				view.getLeftMallet().moveDown();
+				break;
+			case KeyEvent.VK_A:
+				view.getLeftMallet().moveLeft();
+				break;
+			case KeyEvent.VK_D:
+				view.getLeftMallet().moveRight();
+				break;
+				
+				//right mallet movement
+			case KeyEvent.VK_UP:
+				view.getRightMallet().moveUp();
+				break;
+			case KeyEvent.VK_DOWN:
+				view.getRightMallet().moveDown();
+				break;
+			case KeyEvent.VK_LEFT:
+				view.getRightMallet().moveLeft();
+				break;
+			case KeyEvent.VK_RIGHT:
+				view.getRightMallet().moveRight();
+				break;
 		}
 
 		view.setOrigin(p);
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		super.keyReleased(e);
+		
+		switch (e.getKeyCode()) {
+		//left mallet movement
+		case KeyEvent.VK_W:
+			view.getLeftMallet().stopUp();
+			break;
+		case KeyEvent.VK_S:
+			view.getLeftMallet().stopDown();
+			break;
+		case KeyEvent.VK_A:
+			view.getLeftMallet().stopLeft();
+			break;
+		case KeyEvent.VK_D:
+			view.getLeftMallet().stopRight();
+			break;
+			
+			//right mallet.stopment
+		case KeyEvent.VK_UP:
+			view.getRightMallet().stopUp();
+			break;
+		case KeyEvent.VK_DOWN:
+			view.getRightMallet().stopDown();
+			break;
+		case KeyEvent.VK_LEFT:
+			view.getRightMallet().stopLeft();
+			break;
+		case KeyEvent.VK_RIGHT:
+			view.getRightMallet().stopRight();
+			break;
+		}
 	}
 }
 
