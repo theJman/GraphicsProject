@@ -23,8 +23,8 @@ public class GameLogic {
 	
 	GameLogic(View view) {
 		this.view = view;
-		this.playerOneScore = 0;
-		this.playerTwoScore = 0;
+		this.playerOneScore = 2;
+		this.playerTwoScore = 3;
 	}
 	
 	public void update(GLAutoDrawable drawable){

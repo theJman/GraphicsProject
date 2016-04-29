@@ -143,8 +143,8 @@ public final class View
 		for(int i=0; i < Application.numCircles; i++)
 		{
 			Puck newPuck = new Puck(this);
-			newPuck.getCenter().x = (Math.random()*1.3)-1;
-			newPuck.getCenter().y = (Math.random()*1.3)-1;
+			newPuck.getCenter().x = 0;
+			newPuck.getCenter().y = (-.4 + Math.random()*.8);
 			newPuck.getVelocity().x = -0.005;
 			newPuck.getVelocity().y = -0.0005;
 			circlesInteraction.addCircle(newPuck);
