@@ -65,7 +65,12 @@ public class Circle extends Shape {
 	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
+<<<<<<< HEAD
 		if(view.neonMode)
+=======
+
+		if(View.neonMode)
+>>>>>>> Koby-Branch
 		{
 			drawCircle(gl, true, radius, View.globR,View.globG,View.globB);
 		}
