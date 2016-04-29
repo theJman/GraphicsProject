@@ -2,13 +2,13 @@ package Shapes;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import Base.View;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 
-import Base.View;
-
 /**
- * 
+ *
  */
 
 /**
@@ -26,7 +26,7 @@ public class Wall extends Shape {
 	//list of circles that bounce off of the wall
 	protected ArrayList<Circle> circles;
 	protected double edgeMult = .95;
-	
+
 	/**
 	 * @param nView
 	 */
@@ -35,20 +35,20 @@ public class Wall extends Shape {
 		solidEdges = new ArrayList<Edge>();
 		drawEdges = new ArrayList<Edge>();
 		circles = new ArrayList<Circle>();
-		
+
 		//create the edges
 		initEdges(.9,drawEdges);
 		initEdges(.9, solidEdges);
 	}
-	
+
 	/**
-	 * Get the edges that need to be interacted with 
+	 * Get the edges that need to be interacted with
 	 * @return
 	 */
 	public ArrayList<Edge> getEdges(){
 		return solidEdges;
 	}
-	
+
 	/**
 	 * Create all of the edges for the wall
 	 */
@@ -61,7 +61,7 @@ public class Wall extends Shape {
 		edges.add(new Edge(view, new Point2D.Double(edgeMult *-.8, edgeMult *-1.0), new Point2D.Double(edgeMult *.8, edgeMult *-1.0)));
 		//left edge
 		edges.add(new Edge(view, new Point2D.Double(edgeMult *-1.0, edgeMult *.7), new Point2D.Double(edgeMult *-1.0,edgeMult * -.7)));
-		
+
 		//bottom right
 		createCircularEdges(edges, -Math.PI/2.0,edgeMult * 0.2,edgeMult * 0.3, new Point2D.Double(edgeMult *.8, edgeMult *-.7) , new Point2D.Double(edgeMult *.8, edgeMult *-1.0));
 		//top right
@@ -72,7 +72,7 @@ public class Wall extends Shape {
 		createCircularEdges(edges, Math.PI,edgeMult * 0.2,edgeMult * 0.3, new Point2D.Double(edgeMult *-.8,edgeMult * -.7) , new Point2D.Double(edgeMult *-1.0, edgeMult *-.7));
 
 	}
-	
+
 	/**
 	 * Create a circlular edge starting at a point and an angle
 	 * @param startAngle
@@ -80,7 +80,7 @@ public class Wall extends Shape {
 	 * @param startPoint
 	 */
 	private void createCircularEdges( ArrayList<Edge> edges,double startAngle, double radiusX, double radiusY, Point2D.Double centerPoint, Point2D.Double startPoint){
-		
+
 		//only loop a 4th of the circle
 		for (int i=0; i<=8; i++)
 		{
@@ -96,7 +96,8 @@ public class Wall extends Shape {
 			}
 		}
 	}
-	
+
+	@Override
 	public void update(GLAutoDrawable drawable){
 		super.update(drawable);
 		//update all of the edges
@@ -115,11 +116,11 @@ public class Wall extends Shape {
 			e.render(drawable);
 		}
 	}
-	
+
 	protected void drawRect(GL2 gl, double height, double width, double red, double green, double blue){
 		drawRect(gl, height, width, red, green, blue, 255.0);
 	}
-	
+
 	protected void drawRect(GL2 gl, double height, double width, double red, double green, double blue, double alpha){
 		gl.glLineWidth(20);
 		gl.glBegin(GL2.GL_LINE_LOOP);

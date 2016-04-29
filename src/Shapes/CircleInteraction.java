@@ -12,14 +12,14 @@ import java.util.Set;
  */
 public class CircleInteraction implements Interaction{
 	protected ArrayList<Circle> circles;//list of all of the circles
-	
+
 	/**
 	 * Create a new Circle interaction handler
 	 */
 	public CircleInteraction() {
 		circles = new ArrayList<Circle>();
 	}
-	
+
 	/**
 	 * Add a circle to interact with other added circles
 	 * @param c
@@ -27,18 +27,20 @@ public class CircleInteraction implements Interaction{
 	public void addCircle(Circle c){
 		circles.add(c);
 	}
-	
+
 	public void deleteCircle(){
-		circles.remove(circles.size()-1);
+		if(circles.size() > 0);
+			circles.remove(circles.size()-1);
 		circles.trimToSize();
 	}
-	
+
 	/**
 	 * Performs updates on circles if they need to interact with each other
 	 */
+	@Override
 	public void update(){
 		Set<Circle> alreadyUpdatedCircles = new HashSet<Circle>();//set of circles that we have updated and don't need to again
-		
+
 		for (Circle c1 : circles){
 			c1.decrementCantBounceTick();//decrement all cant bounce ticks
 			if(!alreadyUpdatedCircles.contains(c1) && c1.cantBounceTick == 0){
@@ -50,19 +52,19 @@ public class CircleInteraction implements Interaction{
 						//find out if the are touching
 						Point2D.Double center1 = c1.getCenterNotInView();
 						Point2D.Double center2 = c2.getCenterNotInView();
-						
+
 						//find distance between
 						double distance = center1.distance(center2);
 
 						if(distance <= c1.getRadius()/2 + c2.getRadius()/2){
-							
+
 							//Adds a beep on collision. We can make this a better sound later.
 							Toolkit.getDefaultToolkit().beep();
-							
+
 							//now move the circles so that they are not touching
 							boolean stillTouching = true;
 							while(stillTouching){
-								
+
 								Point2D.Double vecBetween = new Point2D.Double(center2.x-center1.x, center2.y-center1.y);
 //								System.out.println(center1 + " : "+ center2);
 //								System.out.println(vecBetween);
@@ -84,8 +86,8 @@ public class CircleInteraction implements Interaction{
 								if(!stillTouching){
 								}
 							}
-							
-							
+
+
 							//calculate new velocities
 							//normal unit vector
 							Point2D.Double nUnit = new Point2D.Double(center2.x-center1.x, center2.y-center1.y);
@@ -107,37 +109,38 @@ public class CircleInteraction implements Interaction{
 							//calculate new normal velocities
 							double v1nP = (v1n*(m1-m2) + 2*m2*v2n)/(m1+m2);
 							double v2nP = (v2n*(m2-m1) + 2*m1*v1n)/(m1+m2);
-							
+
 							double v1tP = v1t;
 							double v2tP = v2t;
-							
+
 							//calculate final unit and tangent velocities
-							
+
 							Point2D.Double v1nPV = Edge.scalerMult(nUnit, v1nP);
-							Point2D.Double v1tPV = Edge.scalerMult(tUnit, v1tP); 
-							Point2D.Double v2nPV = Edge.scalerMult(nUnit, v2nP); 
-							Point2D.Double v2tPV = Edge.scalerMult(tUnit, v2tP); 
-							
+							Point2D.Double v1tPV = Edge.scalerMult(tUnit, v1tP);
+							Point2D.Double v2nPV = Edge.scalerMult(nUnit, v2nP);
+							Point2D.Double v2tPV = Edge.scalerMult(tUnit, v2tP);
+
 							//final velocities
 							c1.setVelocityToInView(vectorAdd(v1nPV, v1tPV));
 							c2.setVelocityToInView(vectorAdd(v2nPV, v2tPV));
-							
-							
+
+
 							//we don't need to do anything with these cicles again on this bounce
 							alreadyUpdatedCircles.add(c2);
 							alreadyUpdatedCircles.add(c1);
-							
+							c1.sparks = true;
+							c2.sparks = true;
 						}
-					
-						
+
+
 					}
 				}
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Gets the dot product of two vectors
 	 * @param v1
@@ -147,11 +150,11 @@ public class CircleInteraction implements Interaction{
 	public double dotProduct(Point2D.Double v1, Point2D.Double v2){
 		return v1.x*v2.x + v1.y*v2.y;
 	}
-	
+
 	public Point2D.Double vectorAdd(Point2D.Double v1, Point2D.Double v2){
 		return new Point2D.Double(v1.x+v2.x, v1.y+v2.y);
 	}
-	
-	
-	
+
+
+
 }
