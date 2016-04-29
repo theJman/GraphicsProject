@@ -18,8 +18,8 @@ import Base.View;
  */
 public class Mallet extends Circle {
 
-	private final double moveSpeed = .01;
-	private final double moveAccel = .002;
+	private final double moveSpeed = .001;
+	private final double moveAccel = .0001;
 	private final double maxVel = .035;
 	protected boolean isLeft;
 	

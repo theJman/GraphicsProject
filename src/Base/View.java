@@ -56,17 +56,17 @@ public final class View
 	//**********************************************************************
 
 	// State (internal) variables
-	private final GLJPanel			canvas;
-	private int						w;				// Canvas width
-	private int						h;				// Canvas height
+	private final GLJPanel				canvas;
+	private int							w;				// Canvas width
+	private int							h;				// Canvas height
 
-	private final KeyHandler		keyHandler;
-	private final MouseHandler		mouseHandler;
+	private final KeyHandler			keyHandler;
+	private final MouseHandler			mouseHandler;
 
-	private final FPSAnimator		animator;
-	private int						counter = 0;	// Frame display counter
+	private final FPSAnimator			animator;
+	private int							counter = 0;	// Frame display counter
 
-	private TextRenderer			renderer;
+	private TextRenderer				renderer;
 
 	private Point2D.Double				origin;		// Current origin coordinates
 	private Point2D.Double				cursor;		// Current cursor coordinates
@@ -78,6 +78,9 @@ public final class View
 	//the mallets
 	private Mallet						leftMallet;
 	private Mallet						rightMallet;
+	
+	private int							frameCounter;
+	private int							neonSlowFactor;
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -101,7 +104,7 @@ public final class View
 		keyHandler = new KeyHandler(this);
 		mouseHandler = new MouseHandler(this);
 
-		neonMode = true;
+		neonMode = false;
 		globR = 100;
 		globG = 175;
 		globB = 255;
@@ -147,7 +150,7 @@ public final class View
 			shapes.add(newPuck);
 		}
 		
-		for(int i = 0; i < 2; i++){
+		/*for(int i = 0; i < 2; i++){
 			//create an invisible puck:)
 			InvisiblePuck invisiblePuck = new InvisiblePuck(this);
 			invisiblePuck.getCenter().x = (Math.random()*1.3)-1;
@@ -157,7 +160,7 @@ public final class View
 			circlesInteraction.addCircle(invisiblePuck);
 			wallInteraction.addCircle(invisiblePuck);
 			shapes.add(invisiblePuck);
-		}
+		}*/
 		
 		
 		//init mallets
@@ -192,6 +195,9 @@ public final class View
 		//add to interactions
 		shapeInteractions.add(circlesInteraction);
 		shapeInteractions.add(wallInteraction);
+		
+		frameCounter 	= 0;
+		neonSlowFactor 	= 2;
 	}
 
 	//**********************************************************************
@@ -297,7 +303,13 @@ public final class View
 	@Override
 	public void		display(GLAutoDrawable drawable)
 	{
-		updateColor();
+		frameCounter++;
+		
+		if(frameCounter % neonSlowFactor == 0)
+		{
+			updateColor();
+		}
+		
 		//System.out.println("R: " + globR + " G: " + globG + " B: " + globB);
 		updateProjection(drawable);
 
@@ -474,6 +486,7 @@ public final class View
 		newPuck.getVelocity().x = -0.005;
 		newPuck.getVelocity().y = -0.0005;
 		circlesInteraction.addCircle(newPuck);
+		wallInteraction.addCircle(newPuck);
 		shapes.add(newPuck);
 	}
 	

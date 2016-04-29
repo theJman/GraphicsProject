@@ -39,6 +39,11 @@ public class WallInteraction implements Interaction {
 	public void addCircle(Circle c){
 		circles.add(c);
 	}
+	
+	public void deleteCircle(){
+		circles.remove(circles.size()-1);
+		circles.trimToSize();
+	}
 
 	/* (non-Javadoc)
 	 * @see Shapes.Interaction#update()

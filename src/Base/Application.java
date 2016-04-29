@@ -54,7 +54,7 @@ public final class Application
 		numCircles = reader.nextInt();
 		reader.close();*/
 		
-		numCircles = 3;
+		numCircles = 1;
 
 		frame.setBounds(DEFAULT_BOUNDS);
 		frame.getContentPane().add(canvas);
