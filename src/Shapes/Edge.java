@@ -18,7 +18,7 @@ public class Edge extends Shape {
 	protected Point2D.Double start;
 	protected Point2D.Double end;
 	
-	protected double red = 255, green = 255, blue = 255, alpha = 255; 
+	protected double red = 255, green = 0, blue = 0, alpha = 255; 
 	
 	/**
 	 * @param nView
