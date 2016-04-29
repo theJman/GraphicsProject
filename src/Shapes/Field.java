@@ -1,10 +1,10 @@
 package Shapes;
 
 
+import Base.View;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-
-import Base.View;
 
 /**
  * This class will just be the build of the playing field. It will be purely for aesthetic purposes.
@@ -78,8 +78,8 @@ public class Field extends Shape {
 			{
 				setColor(gl,255,0,0);
 			}
-			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*percentHeight));
-			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*-percentHeight));
+			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*percentHeight*.9));
+			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*-percentHeight*.9));
 
 			// Left and right lines
 
@@ -92,10 +92,10 @@ public class Field extends Shape {
 				setColor(gl,68,214,243);
 			}
 
-			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight));
-			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*-percentHeight));
-			gl.glVertex2d(convertWidth(view.getWidth()*(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight));
-			gl.glVertex2d(convertWidth(view.getWidth()*(1.0/3)*percentWidth), convertHeight(view.getHeight()*-percentHeight));
+			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight*.9));
+			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*-percentHeight*.9));
+			gl.glVertex2d(convertWidth(view.getWidth()*(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight*.9));
+			gl.glVertex2d(convertWidth(view.getWidth()*(1.0/3)*percentWidth), convertHeight(view.getHeight()*-percentHeight*.9));
 		gl.glEnd();
 		gl.glLineWidth(1);
 	}
@@ -122,7 +122,7 @@ public class Field extends Shape {
 			drawCircle(gl,radius*.7,-x,-y,255,0,0);		// Left bottom circle
 			drawCircle(gl,radius*.7,x,-y,255,0,0);		// Right bottom circle
 		}
-		
+
 
 	}
 
@@ -236,19 +236,19 @@ public class Field extends Shape {
 		{
 			setColor(gl, 255, 0, 0, 255);
 		}
-		
+
 		gl.glBegin(GL2.GL_POLYGON);
-			gl.glVertex2d(x, y);
-			gl.glVertex2d(x - x*(1.0/9), y);
-			gl.glVertex2d(x - x*(1.0/9), -y);
-			gl.glVertex2d(x, -y);
+			gl.glVertex2d(x*.9, y);
+			gl.glVertex2d(x*.9 - x*(1.0/9), y);
+			gl.glVertex2d(x*.9 - x*(1.0/9), -y);
+			gl.glVertex2d(x*.9, -y);
 		gl.glEnd();
 
 		gl.glBegin(GL2.GL_POLYGON);
-			gl.glVertex2d(-x, y);
-			gl.glVertex2d(-x + x*(1.0/9), y);
-			gl.glVertex2d(-x + x*(1.0/9), -y);
-			gl.glVertex2d(-x, -y);
+			gl.glVertex2d(-x*.9, y);
+			gl.glVertex2d(-x*.9 + x*(1.0/9), y);
+			gl.glVertex2d(-x*.9 + x*(1.0/9), -y);
+			gl.glVertex2d(-x*.9, -y);
 		gl.glEnd();
 
 		// Inside portion of rectangle
@@ -260,19 +260,19 @@ public class Field extends Shape {
 		{
 			setColor(gl, 68, 214, 243, 200);
 		}
-		
+
 		gl.glBegin(GL2.GL_POLYGON);
-			gl.glVertex2d(x, y*.95);
-			gl.glVertex2d((x - x*(1.0/9)*.95), y*.95);
-			gl.glVertex2d((x - x*(1.0/9)*.95), -y*.95);
-			gl.glVertex2d(x, -y*.95);
+			gl.glVertex2d(x*.9, y*.95);
+			gl.glVertex2d((x*.9 - x*(1.0/9)*.95), y*.95);
+			gl.glVertex2d((x*.9 - x*(1.0/9)*.95), -y*.95);
+			gl.glVertex2d(x*.9, -y*.95);
 		gl.glEnd();
 
 		gl.glBegin(GL2.GL_POLYGON);
-			gl.glVertex2d(-x, y*.95);
-			gl.glVertex2d((-x + x*(1.0/9)*.95), y*.95);
-			gl.glVertex2d((-x + x*(1.0/9)*.95), -y*.95);
-			gl.glVertex2d(-x, -y*.95);
+			gl.glVertex2d(-x*.9, y*.95);
+			gl.glVertex2d((-x*.9 + x*(1.0/9)*.95), y*.95);
+			gl.glVertex2d((-x*.9 + x*(1.0/9)*.95), -y*.95);
+			gl.glVertex2d(-x*.9, -y*.95);
 		gl.glEnd();
 	}
 

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package Shapes;
 
@@ -14,7 +14,7 @@ public class WallInteraction implements Interaction {
 
 	private Wall wall;
 	private ArrayList<Circle> circles;
-	
+
 	/**
 	 * Create a new WallInteration handler with circles and a wall
 	 */
@@ -22,7 +22,7 @@ public class WallInteraction implements Interaction {
 		wall = nWall;
 		circles = nCircles;
 	}
-	
+
 	/**
 	 * Create a new wall interaction handler and add circles later
 	 * @param nWall
@@ -31,7 +31,7 @@ public class WallInteraction implements Interaction {
 		wall = nWall;
 		circles = new ArrayList<Circle>();
 	}
-	
+
 	/**
 	 * Add a cicle
 	 * @param c
@@ -39,7 +39,7 @@ public class WallInteraction implements Interaction {
 	public void addCircle(Circle c){
 		circles.add(c);
 	}
-	
+
 	public void deleteCircle(){
 		circles.remove(circles.size()-1);
 		circles.trimToSize();
@@ -53,7 +53,7 @@ public class WallInteraction implements Interaction {
 		//check if any of the circles are outside any of the edges
 		for(Edge e : wall.getEdges()){
 			for (Circle c : circles){
-			
+
 				//find out the direction of the circle and then get a couple of the front points to check if it's outside f an edge
 				//we use a couple points to handle the case where the circle is moving in almost the same direction as the wall
 				Point2D.Double unitVel = Edge.getUnitVector(c.velocity);//direction vector
@@ -68,7 +68,7 @@ public class WallInteraction implements Interaction {
 				for(double angle : angles){
 					frontPoint.x = c.center.x + c.convertWidth(c.radius) * Math.cos(angle);
 					frontPoint.y = c.center.y + c.convertHeight(c.radius) * Math.sin(angle);
-					
+
 					if(e.isPointOutside(frontPoint)){
 //						System.out.println("bounce ball");
 						//point went outside this edge
@@ -76,23 +76,25 @@ public class WallInteraction implements Interaction {
 						double normaldotv = Edge.dotProduct(e.getNormalUnit(), c.velocity)*1.8;
 						Point2D.Double normalMult = Edge.scalerMult(e.getNormalUnit(), normaldotv);
 						double normalMultSize = Edge.getMagnitude(normalMult);
-						
+
 						//this point is more outside than others so use it
 						Point2D.Double velU = new Point2D.Double(c.velocity.x, c.velocity.y);
 						Point2D.Double newVel = Edge.vectorSub(velU, normalMult);
-						
+
 						//move circle
 						c.center.x -= normalMult.x;
 						c.center.y -= normalMult.y;
-						
+
 						c.setVelocity(newVel);
+
+						c.sparks = true;
 						break;
 					}
 				}
 			}
 		}
 	}
-	
-	
+
+
 
 }

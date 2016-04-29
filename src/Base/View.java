@@ -6,6 +6,16 @@ import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import Shapes.Circle;
+import Shapes.CircleInteraction;
+import Shapes.Field;
+import Shapes.Interaction;
+import Shapes.Mallet;
+import Shapes.Puck;
+import Shapes.Shape;
+import Shapes.Wall;
+import Shapes.WallInteraction;
+
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -14,17 +24,6 @@ import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
-
-import Shapes.Circle;
-import Shapes.CircleInteraction;
-import Shapes.Field;
-import Shapes.Interaction;
-import Shapes.InvisiblePuck;
-import Shapes.Mallet;
-import Shapes.Puck;
-import Shapes.Shape;
-import Shapes.Wall;
-import Shapes.WallInteraction;
 
 //******************************************************************************
 
@@ -44,6 +43,7 @@ public final class View
 	
 	public boolean neonMode;
 	
+
 	public static int globR;
 		public static boolean globRInc = true;
 	public static int globG;
@@ -110,7 +110,7 @@ public final class View
 		globR = 100;
 		globG = 175;
 		globB = 255;
-		
+
 		//initialize shapes
 		shapes = new ArrayList<Shape>();
 
@@ -151,7 +151,7 @@ public final class View
 			wallInteraction.addCircle(newPuck);
 			shapes.add(newPuck);
 		}
-		
+
 		/*for(int i = 0; i < 2; i++){
 			//create an invisible puck:)
 			InvisiblePuck invisiblePuck = new InvisiblePuck(this);
@@ -163,12 +163,12 @@ public final class View
 			wallInteraction.addCircle(invisiblePuck);
 			shapes.add(invisiblePuck);
 		}*/
-		
-		
+
+
 		//init mallets
 		leftMallet = new Mallet(this,true);
 		rightMallet = new Mallet(this,false);
-		
+
 		shapes.add(leftMallet);
 		shapes.add(rightMallet);
 		circlesInteraction.addCircle(leftMallet);
@@ -177,8 +177,8 @@ public final class View
 		wallInteraction.addCircle(rightMallet);
 		leftMallet.getCenter().x = -0.6;
 		rightMallet.getCenter().x = 0.6;
-		
-		
+
+
 		//test shape
 		/*Circle c1 = new Circle(this);
 		c1.getCenter().x = -0.8;
@@ -197,7 +197,7 @@ public final class View
 		//add to interactions
 		shapeInteractions.add(circlesInteraction);
 		shapeInteractions.add(wallInteraction);
-		
+
 		frameCounter 	= 0;
 		neonSlowFactor 	= 2;
 		
@@ -217,7 +217,7 @@ public final class View
 	{
 		return h;
 	}
-	
+
 	public Mallet getLeftMallet(){
 		return leftMallet;
 	}
@@ -308,12 +308,12 @@ public final class View
 	public void		display(GLAutoDrawable drawable)
 	{
 		frameCounter++;
-		
+
 		if(frameCounter % neonSlowFactor == 0)
 		{
 			updateColor();
 		}
-		
+
 		//System.out.println("R: " + globR + " G: " + globG + " B: " + globB);
 		updateProjection(drawable);
 
@@ -479,7 +479,7 @@ public final class View
 
 		gl.glEnd();
 	}
-	
+
 	/**
 	 * Adds a new puck
 	 *
@@ -495,7 +495,7 @@ public final class View
 		wallInteraction.addCircle(newPuck);
 		shapes.add(newPuck);
 	}
-	
+
 	/**
 	 * Subtracts a puck
 	 *
@@ -505,9 +505,9 @@ public final class View
 		circlesInteraction.deleteCircle();
 		shapes.remove(shapes.size()-1);
 	}
-	
+
 	private void updateColor(){
-		
+
 		if(globR >= 255)
 		{
 			globRInc = false;
@@ -516,7 +516,7 @@ public final class View
 		{
 			globRInc = true;
 		}
-		
+
 		if(globRInc == true)
 		{
 			globR+=(Math.random() * 5);
@@ -525,7 +525,7 @@ public final class View
 		{
 			globR-=(Math.random() * 5);
 		}
-		
+
 		if(globG >= 255)
 		{
 			globGInc = false;
@@ -534,7 +534,7 @@ public final class View
 		{
 			globGInc = true;
 		}
-		
+
 		if(globGInc == true)
 		{
 			globG+=(Math.random() * 5);
@@ -543,7 +543,7 @@ public final class View
 		{
 			globG-=(Math.random() * 5);
 		}
-		
+
 		if(globB >= 255)
 		{
 			globBInc = false;
@@ -552,7 +552,7 @@ public final class View
 		{
 			globBInc = true;
 		}
-		
+
 		if(globBInc == true)
 		{
 			globB+=(Math.random() * 5);
