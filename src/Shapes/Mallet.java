@@ -131,7 +131,7 @@ public class Mallet extends Circle {
 		if(View.neonMode)
 		{
 			//drawCircle(gl, true, radius, View.globR,View.globG,View.globB);
-			drawCircle(gl, true, radius, 255, 255, 255);
+			drawCircle(gl, true, radius, View.globR,View.globG,View.globB);
 		}
 		else
 		{
@@ -140,6 +140,3 @@ public class Mallet extends Circle {
 	}
 
 }
-
-
-

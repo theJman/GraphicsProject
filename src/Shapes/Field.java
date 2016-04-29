@@ -228,7 +228,15 @@ public class Field extends Shape {
 		double y = convertHeight(view.getHeight()*percentHeight*(1.0/3));
 
 		// Under portion of goal boundaries
-		setColor(gl, 255, 0, 0, 255);
+		if(View.neonMode)
+		{
+			setColor(gl,View.globR,View.globG,View.globB);
+		}
+		else
+		{
+			setColor(gl, 255, 0, 0, 255);
+		}
+		
 		gl.glBegin(GL2.GL_POLYGON);
 			gl.glVertex2d(x, y);
 			gl.glVertex2d(x - x*(1.0/9), y);
@@ -244,7 +252,15 @@ public class Field extends Shape {
 		gl.glEnd();
 
 		// Above portion of goal boundaries
-		setColor(gl, 68, 214, 243, 200);
+		
+		if(View.neonMode)
+		{
+			setColor(gl,View.globR,View.globG,View.globB);
+		}
+		else
+		{
+			setColor(gl, 68, 214, 243, 200);
+		}
 		gl.glBegin(GL2.GL_POLYGON);
 			gl.glVertex2d(x, y*.95);
 			gl.glVertex2d((x - x*(1.0/9)*.95), y*.95);
