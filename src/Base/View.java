@@ -42,7 +42,7 @@ public final class View
 	public static final int				DEFAULT_FRAMES_PER_SECOND = 60;
 	private static final DecimalFormat	FORMAT = new DecimalFormat("0.000");
 	
-	public static boolean neonMode;
+	public boolean neonMode;
 	
 	public static int globR;
 		public static boolean globRInc = true;
@@ -78,6 +78,8 @@ public final class View
 	//the mallets
 	private Mallet						leftMallet;
 	private Mallet						rightMallet;
+	
+	private GameLogic					gameLogic;
 	
 	private int							frameCounter;
 	private int							neonSlowFactor;
@@ -198,6 +200,8 @@ public final class View
 		
 		frameCounter 	= 0;
 		neonSlowFactor 	= 2;
+		
+		gameLogic = new GameLogic(this);
 	}
 
 	//**********************************************************************
@@ -361,7 +365,7 @@ public final class View
 			s.update(drawable);
 		}
 
-
+		gameLogic.update(drawable);
 		canvas.repaint();
 
 	}
@@ -376,6 +380,8 @@ public final class View
 		for (Shape s : shapes) {
 			s.render(drawable);
 		}
+		
+		gameLogic.render(drawable);
 
 //		drawBounds(gl);							// Unit bounding box
 //		drawAxes(gl);							// X and Y axes

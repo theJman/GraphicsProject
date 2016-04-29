@@ -45,7 +45,7 @@ public final class KeyHandler extends KeyAdapter
 		switch (e.getKeyCode())
 		{	
 			case KeyEvent.VK_N:
-				View.neonMode = !View.neonMode; break;
+				view.neonMode = !view.neonMode; break;
 				
 			case KeyEvent.VK_MINUS:
 				view.deleteCircle();	break;

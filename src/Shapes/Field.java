@@ -34,7 +34,7 @@ public class Field extends Shape {
 	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
-		if(View.neonMode)
+		if(view.neonMode)
 		{
 			drawField(gl,0,0,0);
 		}
@@ -70,7 +70,7 @@ public class Field extends Shape {
 		gl.glLineWidth(20);
 		gl.glBegin(GL2.GL_LINES);
 			// Center line
-			if(View.neonMode)
+			if(view.neonMode)
 			{
 				setColor(gl,View.globR,View.globG,View.globB);
 			}
@@ -83,7 +83,7 @@ public class Field extends Shape {
 
 			// Left and right lines
 
-			if(View.neonMode)
+			if(view.neonMode)
 			{
 				setColor(gl,View.globR,View.globG,View.globB);
 			}
@@ -106,7 +106,7 @@ public class Field extends Shape {
 
 		double x = convertWidth(view.getWidth()*(1.0/1.75));
 		double y = convertHeight(view.getHeight()*(1.0/2));
-		if(View.neonMode)
+		if(view.neonMode)
 		{
 			drawCircle(gl,radius,0,0,View.globR,View.globG,View.globB);		// Center circle
 			drawCircle(gl,radius*.7,-x,y,View.globR,View.globG,View.globB);		// Left top circle
@@ -148,7 +148,7 @@ public class Field extends Shape {
 		// White it out
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 
-		if(View.neonMode)
+		if(view.neonMode)
 		{
 			setColor(gl,0,0,0);
 		}
@@ -228,7 +228,7 @@ public class Field extends Shape {
 		double y = convertHeight(view.getHeight()*percentHeight*(1.0/3));
 
 		//Border of rectangle
-		if(View.neonMode)
+		if(view.neonMode)
 		{
 			setColor(gl,View.globR,View.globG,View.globB);
 		}
@@ -252,7 +252,7 @@ public class Field extends Shape {
 		gl.glEnd();
 
 		// Inside portion of rectangle
-		if(View.neonMode)
+		if(view.neonMode)
 		{
 			setColor(gl,0,0,0);
 		}
