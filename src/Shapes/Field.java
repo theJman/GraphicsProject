@@ -227,7 +227,7 @@ public class Field extends Shape {
 		double x = convertWidth(view.getWidth()*percentWidth);
 		double y = convertHeight(view.getHeight()*percentHeight*(1.0/3));
 
-		// Under portion of goal boundaries
+		//Border of rectangle
 		if(View.neonMode)
 		{
 			setColor(gl,View.globR,View.globG,View.globB);
@@ -251,16 +251,16 @@ public class Field extends Shape {
 			gl.glVertex2d(-x, -y);
 		gl.glEnd();
 
-		// Above portion of goal boundaries
-		
+		// Inside portion of rectangle
 		if(View.neonMode)
 		{
-			setColor(gl,View.globR,View.globG,View.globB);
+			setColor(gl,0,0,0);
 		}
 		else
 		{
 			setColor(gl, 68, 214, 243, 200);
 		}
+		
 		gl.glBegin(GL2.GL_POLYGON);
 			gl.glVertex2d(x, y*.95);
 			gl.glVertex2d((x - x*(1.0/9)*.95), y*.95);
