@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package Shapes;
 
 import java.awt.geom.Point2D;
