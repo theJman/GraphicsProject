@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 //******************************************************************************
 
@@ -82,6 +83,14 @@ public final class Utilities
 		return (((e.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) != 0) ||
 				((e instanceof MouseEvent) &&
 				 (((MouseEvent)e).getButton() == 3)));
+	}
+
+	public static boolean getChance(int chance)
+	{
+		Random rand = new Random();
+		int temp = rand.nextInt(100) + 1;
+		if(temp <= chance) return true;
+		else return false;
 	}
 }
 

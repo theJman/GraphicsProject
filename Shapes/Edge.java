@@ -1,14 +1,14 @@
 /**
- * 
+ *
  */
 package Shapes;
 
 import java.awt.geom.Point2D;
 
+import Base.View;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-
-import Base.View;
 
 /**
  * @author JeremyLittel
@@ -17,9 +17,9 @@ import Base.View;
 public class Edge extends Shape {
 	protected Point2D.Double start;
 	protected Point2D.Double end;
-	
-	protected double red = 255, green = 0, blue = 0, alpha = 255; 
-	
+
+	protected double red = 255, green = 0, blue = 0, alpha = 255;
+
 	/**
 	 * @param nView
 	 */
@@ -28,8 +28,9 @@ public class Edge extends Shape {
 
 		start = new Point2D.Double(0, 0);
 		end = new Point2D.Double(0, 0);
+
 	}
-	
+
 	/**
 	 * Create a new edge with a start and end point
 	 * @param nView
@@ -41,7 +42,7 @@ public class Edge extends Shape {
 		start = nStart;
 		end = nEnd;
 	}
-	
+
 	/**
 	 * Set the color of this edge
 	 * @param r
@@ -63,16 +64,16 @@ public class Edge extends Shape {
 	public Point2D.Double d(){
 		return new Point2D.Double(end.x-start.x, end.y-start.y);
 	}
-	
+
 	/**
 	 * Gets the normal vector to the line
 	 * @return
 	 */
 	public Point2D.Double getNormal(){
 		return new Point2D.Double(-d().y,d().x);
-		
+
 	}
-	
+
 	/**
 	 * Get the normal unit vector
 	 * @return
@@ -83,7 +84,7 @@ public class Edge extends Shape {
 		nU.y /= getMagnitude(getNormal());
 		return nU;
 	}
-	
+
 	/**
 	 * Cross product of two vectors
 	 * @param one
@@ -93,7 +94,7 @@ public class Edge extends Shape {
 	public static double crossProduct(Point2D.Double one, Point2D.Double two){
 		return one.x*two.y-one.y*two.x;
 	}
-	
+
 	/**
 	 * Get the magnitude of a vector
 	 * @param v
@@ -102,7 +103,7 @@ public class Edge extends Shape {
 	public static double getMagnitude(Point2D.Double v){
 		return Math.sqrt(v.x*v.x + v.y*v.y);
 	}
-	
+
 	/**
 	 * Dot product
 	 * @param one
@@ -112,7 +113,7 @@ public class Edge extends Shape {
 	public static double dotProduct(Point2D.Double one, Point2D.Double two){
 		return one.x*two.x + one.y*two.y;
 	}
-	
+
 	/**
 	 * Scaler Multiplication
 	 * @param v
@@ -122,7 +123,7 @@ public class Edge extends Shape {
 	public static Point2D.Double scalerMult(Point2D.Double v, double s){
 		return new Point2D.Double(v.x*s, v.y*s);
 	}
-	
+
 	/**
 	 * Adds two vectors together
 	 * @param one
@@ -132,11 +133,11 @@ public class Edge extends Shape {
 	public static Point2D.Double vectorAdd(Point2D.Double one, Point2D.Double two){
 		return new Point2D.Double(one.x+two.x, one.y+two.y);
 	}
-	
+
 	public static Point2D.Double vectorSub(Point2D.Double one, Point2D.Double two){
 		return new Point2D.Double(one.x-two.x, one.y-two.y);
 	}
-	
+
 	/**
 	 * Checks if a point just went outside of the this line
 	 * @param point
@@ -146,7 +147,7 @@ public class Edge extends Shape {
 		Point2D.Double directionToPoint = new Point2D.Double(point.x-start.x, point.y-start.y);
 		return crossProduct(directionToPoint, d()) > 0;
 	}
-	
+
 	/**
 	 * Check if a point is inside
 	 * @param point
@@ -155,7 +156,7 @@ public class Edge extends Shape {
 	public boolean isPointInside(Point2D.Double point){
 		return !isPointOutside(point);
 	}
-	
+
 	/**
 	 * Get the unit vector from a vector
 	 * @param v
@@ -165,12 +166,27 @@ public class Edge extends Shape {
 		double mag = getMagnitude(v);
 		return new Point2D.Double(v.x/mag, v.y/mag);
 	}
-	
+
 	/**
 	 * Render the line
 	 */
+	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
+
+		if(view.whichSkin == 0)
+		{
+			red = 255; green = 0; blue = 0;
+		}
+		else if(view.whichSkin == 1)
+		{
+			red = view.globR; green = view.globG; blue = view.globB;
+		}
+		else if(view.whichSkin == 2)
+		{
+
+		}
+
 		gl.glBegin(GL2.GL_LINES);
 		setColor(gl, red, green, blue, alpha);
 		gl.glVertex2d(start.x, start.y);
@@ -178,5 +194,5 @@ public class Edge extends Shape {
 		gl.glEnd();
 	}
 
-	
+
 }

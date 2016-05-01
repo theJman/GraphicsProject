@@ -2,7 +2,7 @@ package Shapes;
 import Base.View;
 
 /**
- * 
+ *
  */
 
 /**
@@ -16,7 +16,7 @@ public class Puck extends Circle {
 	 * @param nView
 	 */
 	public Puck(View nView) {
-		super(nView);
+		super(nView, true);
 	}
 
 }

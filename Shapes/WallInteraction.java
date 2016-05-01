@@ -3,6 +3,7 @@ package Shapes;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * @author JeremyLittel
@@ -38,8 +39,15 @@ public class WallInteraction implements Interaction {
 		circles.add(c);
 	}
 
-	public void deleteCircle(){
-		circles.remove(circles.size()-1);
+	public void deleteCircle(UUID id){
+		for(int i = circles.size()-1; i >= 0; i--)
+		{
+			if(circles.get(i).id == id)
+			{
+				circles.remove(i);
+				break;
+			}
+		}
 		circles.trimToSize();
 	}
 

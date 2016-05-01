@@ -3,10 +3,14 @@ package Base;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.UUID;
 
-import Shapes.Circle;
 import Shapes.CircleInteraction;
 import Shapes.Field;
 import Shapes.Interaction;
@@ -24,8 +28,9 @@ import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
-
+import com.jogamp.opengl.util.texture.Texture;
 //******************************************************************************
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  *
@@ -40,16 +45,24 @@ public final class View
 
 	public static final int				DEFAULT_FRAMES_PER_SECOND = 60;
 	private static final DecimalFormat	FORMAT = new DecimalFormat("0.000");
-	
-	public boolean neonMode;
-	
 
-	public static int globR;
+	public int whichSkin = 0; // Skin is the look of the field, 0-regular, 1-neon, 3-???
+	public boolean reintroduce = false;		// whether or not to reintroduce pucks when they are scored
+	public String whichTeam = "none";
+	public HashMap<String, Texture> teamlist = new HashMap<String, Texture>();
+	public String 	scoreDirection;	// false is right++, true is left++
+
+
+	public int globR;
 		public static boolean globRInc = true;
-	public static int globG;
+	public int globG;
 		public static boolean globGInc = true;
-	public static int globB;
+	public int globB;
 		public static boolean globBInc = true;
+
+	public int specialpuckChance = 1;
+	public boolean specialpuckExists = false;
+
 
 	//**********************************************************************
 	// Private Members
@@ -78,9 +91,9 @@ public final class View
 	//the mallets
 	private Mallet						leftMallet;
 	private Mallet						rightMallet;
-	
+
 	private GameLogic					gameLogic;
-	
+
 	private int							frameCounter;
 	private int							neonSlowFactor;
 
@@ -106,7 +119,6 @@ public final class View
 		keyHandler = new KeyHandler(this);
 		mouseHandler = new MouseHandler(this);
 
-		neonMode = false;
 		globR = 100;
 		globG = 175;
 		globB = 255;
@@ -140,17 +152,15 @@ public final class View
 
 		shapes.add(w1);
 
-		for(int i=0; i < Application.numCircles; i++)
-		{
-			Puck newPuck = new Puck(this);
-			newPuck.getCenter().x = 0;
-			newPuck.getCenter().y = (-.4 + Math.random()*.8);
-			newPuck.getVelocity().x = -0.005;
-			newPuck.getVelocity().y = -0.0005;
-			circlesInteraction.addCircle(newPuck);
-			wallInteraction.addCircle(newPuck);
-			shapes.add(newPuck);
-		}
+		addPuck();
+//		Puck newPuck = new Puck(this);
+//		newPuck.getCenter().x = 0;
+//		newPuck.getCenter().y = (-.4 + Math.random()*.8);
+//		newPuck.getVelocity().x = -0.005;
+//		newPuck.getVelocity().y = -0.0005;
+//		circlesInteraction.addCircle(newPuck);
+//		wallInteraction.addCircle(newPuck);
+//		shapes.add(newPuck);
 
 		/*for(int i = 0; i < 2; i++){
 			//create an invisible puck:)
@@ -200,8 +210,10 @@ public final class View
 
 		frameCounter 	= 0;
 		neonSlowFactor 	= 2;
-		
+
 		gameLogic = new GameLogic(this);
+
+		scoreDirection = "";
 	}
 
 	//**********************************************************************
@@ -261,8 +273,11 @@ public final class View
 
 	public void mousePressed(Point2D.Double p){
 		for (Shape s : shapes){
-			s.getVelocity().x *= 1.5;
-			s.getVelocity().y *= 1.5;
+			if(s instanceof Puck)
+			{
+				s.getVelocity().x *= 1.5;
+				s.getVelocity().y *= 1.5;
+			}
 		}
 	}
 
@@ -314,7 +329,6 @@ public final class View
 			updateColor();
 		}
 
-		//System.out.println("R: " + globR + " G: " + globG + " B: " + globB);
 		updateProjection(drawable);
 
 		update(drawable);
@@ -361,13 +375,26 @@ public final class View
 		}
 
 		//update the shapes
-		for (Shape s : shapes){
+		for (int i = 0; i < shapes.size(); i++)
+		{
+			Shape s = shapes.get(i);
+			if(s instanceof Puck && ((Puck) s).scored == true)
+			{
+				if(((Puck) s).specialpuck) specialpuckExists = false;
+				gameLogic.incrementScore(scoreDirection, ((Puck) s).specialpuck);
+				circlesInteraction.deleteCircle(s.id);
+				wallInteraction.deleteCircle(s.id);
+				shapes.remove(i);
+				if(reintroduce == true) addPuck();
+			}
+
 			s.update(drawable);
 		}
 
 		gameLogic.update(drawable);
 		canvas.repaint();
 
+		doPowerups();
 	}
 
 	private void	render(GLAutoDrawable drawable)
@@ -376,48 +403,87 @@ public final class View
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);		// Clear the buffer
 
-		//render all of the shapes
+		if(teamlist.isEmpty())
+			loadTeams(drawable);
+
+		//render the shapes
 		for (Shape s : shapes) {
 			s.render(drawable);
 		}
-		
-		gameLogic.render(drawable);
 
-//		drawBounds(gl);							// Unit bounding box
-//		drawAxes(gl);							// X and Y axes
-//		drawCursor(gl);							// Crosshairs at mouse location
-//		drawCursorCoordinates(drawable);		// Draw some text
-//		drawPolyline(gl);						// Draw the user's sketch
+		// Render the scores -- MOVE THIS TO FIELD
+		gameLogic.render(drawable);
 	}
 
 	//**********************************************************************
 	// Private Methods (Scene)
 	//**********************************************************************
 
+
+	//**********************************************************************
+	// Utility Methods
+	//**********************************************************************
+	private void loadTeams(GLAutoDrawable drawable)
+	{
+		GL2		gl = drawable.getGL().getGL2();
+		String[] list = {"avalanche.png"};
+//				,"bruins.png","canadiens.png","canes.png","canucks.png",
+//							"caps.png","coyotes.png","devils.png","ducks.png","flames.png",
+//							"flyers.png","hawks.png","island.png","jackets.png","jets.png",
+//							"kings.png","leafs.png","lightning.png","oilers.png","panthers.png",
+//							"penguins.png","preds.png","rangers.png","sabres.png","senators.png",
+//							"sharks.png","stars.png","wild.png","wings.png"
+//						};
+
+		for(String team : list)
+		{
+			Texture tex = null;
+			try
+			{
+				tex = TextureIO.newTexture(new File(team), true);
+				tex.enable(gl);
+				tex.bind(gl);
+			} catch(IOException ex)
+			{
+				System.err.println(ex);
+			}
+			teamlist.put(team,tex);
+		}
+	}
+
 	/**
 	 * Adds a new puck
 	 *
-	 * @author TreMcP
 	 */
-	public void addCircle(){
-		Circle newPuck = new Circle(this);
-		newPuck.getCenter().x = 0;
-		newPuck.getCenter().y = -.4 + Math.random()*.8;
-		newPuck.getVelocity().x = -0.005;
-		newPuck.getVelocity().y = -0.0005;
+	public void addPuck(){
+		Random rand = new Random();
+
+		Puck newPuck = new Puck(this);
+		newPuck.getCenter().x = -.1 + (.1 - -.1) * rand.nextDouble();	// x value inside center circle
+		newPuck.getCenter().y = -.1 + (.1 - -.1) * rand.nextDouble();	// y value inside center circle
+		newPuck.getVelocity().x = -.005 + (.005 - -.005) * rand.nextDouble();	// random x val
+		newPuck.getVelocity().y = -.005 + (.005 - -.005) * rand.nextDouble();	// random y val
 		circlesInteraction.addCircle(newPuck);
 		wallInteraction.addCircle(newPuck);
 		shapes.add(newPuck);
 	}
 
-	/**
-	 * Subtracts a puck
-	 *
-	 * @author TreMcP
-	 */
-	public void deleteCircle(){
-		circlesInteraction.deleteCircle();
-		shapes.remove(shapes.size()-1);
+	private void doPowerups()
+	{
+		if(Utilities.getChance(specialpuckChance) && !specialpuckExists)
+		{
+			for(Shape s : shapes)
+			{
+				if(s instanceof Puck && ((Puck) s).specialpuck == false)
+				{
+					((Puck) s).specialpuck = true;
+					((Puck) s).sparks = true;
+					specialpuckExists = true;
+					break;
+				}
+			}
+		}
+
 	}
 
 	private void updateColor(){
@@ -474,6 +540,79 @@ public final class View
 		else
 		{
 			globB-=(Math.random() * 5);
+		}
+	}
+
+	/**
+	 * Subtracts a puck
+	 *
+	 */
+	public void deletePuck(){
+		UUID id = null;
+		for(int i = shapes.size()-1; i >= 0; i--)
+		{
+			Shape s = shapes.get(i);
+			if(s instanceof Puck)
+			{
+				id = shapes.get(i).id;
+				shapes.remove(i);
+			}
+		}
+
+		if(id != null)
+		{
+			circlesInteraction.deleteCircle(id);
+			wallInteraction.deleteCircle(id);
+		}
+	}
+
+	/**
+	 * Simulates the start of a new game
+	 */
+	public void newGame()
+	{
+		deleteAllPucks();
+		resetMallets();
+		resetScores();
+		addPuck();
+	}
+
+	/**
+	 * Resets scores to 0
+	 */
+	public void resetScores()
+	{
+		gameLogic.leftPlayerScore = 0;
+		gameLogic.rightPlayerScore = 0;
+	}
+
+	/**
+	 * Resets mallets to original position
+	 */
+	public void resetMallets()
+	{
+		leftMallet.getCenter().x = -0.6;
+		leftMallet.getCenter().y = 0.0;
+
+		rightMallet.getCenter().x = 0.6;
+		rightMallet.getCenter().y = 0.0;
+	}
+
+	/**
+	 * Deletes all pucks from playing field (including interactions)
+	 */
+	private void deleteAllPucks()
+	{
+		for(int i = 0; i < shapes.size(); i++)
+		{
+			Shape s = shapes.get(i);
+			UUID id = s.id;
+			if(s instanceof Puck)
+			{
+				shapes.remove(i);
+				circlesInteraction.deleteCircle(id);
+				wallInteraction.deleteCircle(id);
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Class to manage interactions between circles
@@ -11,7 +12,7 @@ import java.util.Set;
  *
  */
 public class CircleInteraction implements Interaction{
-	protected ArrayList<Circle> circles;//list of all of the circles
+	public ArrayList<Circle> circles;//list of all of the circles
 
 	/**
 	 * Create a new Circle interaction handler
@@ -28,9 +29,15 @@ public class CircleInteraction implements Interaction{
 		circles.add(c);
 	}
 
-	public void deleteCircle(){
-		if(circles.size() > 0);
-			circles.remove(circles.size()-1);
+	public void deleteCircle(UUID id){
+		for(int i = circles.size()-1; i >= 0; i--)
+		{
+			if(circles.get(i).id == id)
+			{
+				circles.remove(i);
+				break;
+			}
+		}
 		circles.trimToSize();
 	}
 
@@ -72,7 +79,7 @@ public class CircleInteraction implements Interaction{
 
 								double vecMag = Edge.getMagnitude(vecBetween);
 								double badDistance = Math.abs(c2.getCenterNotInView().distance(c1.getCenterNotInView()) - c1.getRadius()/2 + c2.getRadius()/2);
-								System.out.println(badDistance);
+//								System.out.println(badDistance);
 
 								vecBetween.x /= badDistance;
 								vecBetween.y /= badDistance;
@@ -130,6 +137,18 @@ public class CircleInteraction implements Interaction{
 							alreadyUpdatedCircles.add(c1);
 							c1.sparks = true;
 							c2.sparks = true;
+
+							double tempr = c1.red;
+							double tempg = c1.green;
+							double tempb = c1.blue;
+
+							c1.red = c2.red;
+							c1.green = c2.green;
+							c1.blue = c1.blue;
+
+							c2.red = tempr;
+							c2.green = tempg;
+							c2.blue = tempb;
 						}
 
 

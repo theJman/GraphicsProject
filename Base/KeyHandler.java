@@ -1,9 +1,8 @@
 package Base;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-
-import Shapes.Circle;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 
 //******************************************************************************
 
@@ -37,26 +36,31 @@ public final class KeyHandler extends KeyAdapter
 	// Override Methods (KeyListener)
 	//**********************************************************************
 
+	@Override
 	public void		keyPressed(KeyEvent e)
 	{
 		Point2D.Double	p = view.getOrigin();
 		double			a = (Utilities.isShiftDown(e) ? 0.01 : 0.1);
 
 		switch (e.getKeyCode())
-		{	
+		{
 			case KeyEvent.VK_N:
-				view.neonMode = !view.neonMode; break;
-				
+				if(view.whichSkin == 0)
+					view.whichSkin = 1;
+				else if(view.whichSkin == 1)
+					view.whichSkin = 0;
+				break;
+
 			case KeyEvent.VK_MINUS:
-				view.deleteCircle();	break;
-				
+				view.deletePuck();	break;
+
 			case KeyEvent.VK_EQUALS:
-				view.addCircle();	break;
+				view.addPuck();	break;
 
 			case KeyEvent.VK_DELETE:
 				view.clear();
 				return;
-				
+
 				//left mallet movement
 			case KeyEvent.VK_W:
 				view.getLeftMallet().moveUp();
@@ -70,7 +74,7 @@ public final class KeyHandler extends KeyAdapter
 			case KeyEvent.VK_D:
 				view.getLeftMallet().moveRight();
 				break;
-				
+
 				//right mallet movement
 			case KeyEvent.VK_UP:
 				view.getRightMallet().moveUp();
@@ -88,11 +92,11 @@ public final class KeyHandler extends KeyAdapter
 
 		view.setOrigin(p);
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		super.keyReleased(e);
-		
+
 		switch (e.getKeyCode()) {
 		//left mallet movement
 		case KeyEvent.VK_W:
@@ -107,7 +111,7 @@ public final class KeyHandler extends KeyAdapter
 		case KeyEvent.VK_D:
 			view.getLeftMallet().stopRight();
 			break;
-			
+
 			//right mallet.stopment
 		case KeyEvent.VK_UP:
 			view.getRightMallet().stopUp();

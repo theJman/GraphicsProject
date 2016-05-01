@@ -1,7 +1,9 @@
 package Base;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Point2D;
 
 //******************************************************************************
 
@@ -37,13 +39,15 @@ public final class MouseHandler extends MouseAdapter
 	// Override Methods (MouseListener)
 	//**********************************************************************
 
+	@Override
 	public void		mouseClicked(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
-		System.out.println(v.getX() + " : "+ v.getY());
-		
+//		System.out.println(v.getX() + " : "+ v.getY());
+
 	}
 
+	@Override
 	public void		mouseEntered(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
@@ -51,11 +55,13 @@ public final class MouseHandler extends MouseAdapter
 		//view.setCursor(v);
 	}
 
+	@Override
 	public void		mouseExited(MouseEvent e)
 	{
 		view.setCursor(null);
 	}
 
+	@Override
 	public void		mousePressed(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
@@ -63,6 +69,7 @@ public final class MouseHandler extends MouseAdapter
 		view.mousePressed(v);
 	}
 
+	@Override
 	public void		mouseReleased(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
@@ -74,6 +81,7 @@ public final class MouseHandler extends MouseAdapter
 	// Override Methods (MouseMotionListener)
 	//**********************************************************************
 
+	@Override
 	public void		mouseDragged(MouseEvent e)
 	{
 		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
@@ -81,6 +89,7 @@ public final class MouseHandler extends MouseAdapter
 		view.mouseDrag(v);
 	}
 
+	@Override
 	public void		mouseMoved(MouseEvent e)
 	{
 //		Point2D.Double	v = calcCoordinatesInView(e.getX(), e.getY());
@@ -92,6 +101,7 @@ public final class MouseHandler extends MouseAdapter
 	// Override Methods (MouseWheelListener)
 	//**********************************************************************
 
+	@Override
 	public void		mouseWheelMoved(MouseWheelEvent e)
 	{
 	}

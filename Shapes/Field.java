@@ -3,8 +3,10 @@ package Shapes;
 
 import Base.View;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.util.texture.Texture;
 
 /**
  * This class will just be the build of the playing field. It will be purely for aesthetic purposes.
@@ -34,18 +36,21 @@ public class Field extends Shape {
 	@Override
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
-		if(view.neonMode)
-		{
+
+		if(view.whichSkin == 0)
+			drawField(gl,255,255,255);
+		else if(view.whichSkin == 1)
 			drawField(gl,0,0,0);
-		}
 		else
 		{
-			drawField(gl,255,255,255);
+
 		}
+
 		drawLines(gl);
 		drawCircles(gl);
 		drawGoalBoundary(gl);
-		//loadImageCenterIce(gl);
+		if(view.whichSkin == 0 && !view.whichTeam.equals("none"))
+			drawImageCenterIce(gl); // only draw logo if it is the hockey skin and a team is selected
 	}
 
 	private void drawField(GL2 gl, double red, double green, double blue){
@@ -70,26 +75,29 @@ public class Field extends Shape {
 		gl.glLineWidth(20);
 		gl.glBegin(GL2.GL_LINES);
 			// Center line
-			if(view.neonMode)
-			{
-				setColor(gl,View.globR,View.globG,View.globB);
-			}
+			if(view.whichSkin == 0)
+				setColor(gl,255,0,0);
+			else if(view.whichSkin == 1)
+				setColor(gl,view.globR,view.globG,view.globB);
 			else
 			{
-				setColor(gl,255,0,0);
+
 			}
+
 			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*percentHeight*.9));
 			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*-percentHeight*.9));
 
 			// Left and right lines
 
-			if(view.neonMode)
+			if(view.whichSkin == 0)
+				setColor(gl,68,214,243);
+			else if(view.whichSkin == 1)
 			{
-				setColor(gl,View.globR,View.globG,View.globB);
+				setColor(gl,view.globR,view.globG,view.globB);
 			}
 			else
 			{
-				setColor(gl,68,214,243);
+
 			}
 
 			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight*.9));
@@ -106,21 +114,26 @@ public class Field extends Shape {
 
 		double x = convertWidth(view.getWidth()*(1.0/1.75));
 		double y = convertHeight(view.getHeight()*(1.0/2));
-		if(view.neonMode)
-		{
-			drawCircle(gl,radius,0,0,View.globR,View.globG,View.globB);		// Center circle
-			drawCircle(gl,radius*.7,-x,y,View.globR,View.globG,View.globB);		// Left top circle
-			drawCircle(gl,radius*.7,x,y,View.globR,View.globG,View.globB);		// Right top circle
-			drawCircle(gl,radius*.7,-x,-y,View.globR,View.globG,View.globB);		// Left bottom circle
-			drawCircle(gl,radius*.7,x,-y,View.globR,View.globG,View.globB);		// Right bottom circle
-		}
-		else
+
+		if(view.whichSkin == 0)
 		{
 			drawCircle(gl,radius,0,0,255,0,0);		// Center circle
 			drawCircle(gl,radius*.7,-x,y,255,0,0);		// Left top circle
 			drawCircle(gl,radius*.7,x,y,255,0,0);		// Right top circle
 			drawCircle(gl,radius*.7,-x,-y,255,0,0);		// Left bottom circle
 			drawCircle(gl,radius*.7,x,-y,255,0,0);		// Right bottom circle
+		}
+		else if(view.whichSkin == 1)
+		{
+			drawCircle(gl,radius,0,0,view.globR,view.globG,view.globB);		// Center circle
+			drawCircle(gl,radius*.7,-x,y,view.globR,view.globG,view.globB);		// Left top circle
+			drawCircle(gl,radius*.7,x,y,view.globR,view.globG,view.globB);		// Right top circle
+			drawCircle(gl,radius*.7,-x,-y,view.globR,view.globG,view.globB);		// Left bottom circle
+			drawCircle(gl,radius*.7,x,-y,view.globR,view.globG,view.globB);		// Right bottom circle
+		}
+		else
+		{
+
 		}
 
 
@@ -148,10 +161,10 @@ public class Field extends Shape {
 		// White it out
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 
-		if(view.neonMode)
-		{
+		if(view.whichSkin == 0)
+			setColor(gl,255,255,255);
+		else if(view.whichSkin == 1)
 			setColor(gl,0,0,0);
-		}
 		else
 		{
 			setColor(gl,255,255,255);
@@ -216,9 +229,29 @@ public class Field extends Shape {
 		gl.glLineWidth(1);
 	}
 
-	private void loadImageCenterIce(GL2 gl){
-		// TODO I cheated and used 2d graphics to add this image.. turns out adding a png is more difficult
-		//Image logo = Utilities.fullyLoadImage("wild_logo.png");
+	private void drawImageCenterIce(GL2 gl)
+	{
+		Texture tex = view.teamlist.get(view.whichTeam);
+		tex.enable(gl);
+		tex.bind(gl);
+
+		gl.glEnable(GL.GL_TEXTURE_2D);
+		gl.glColor3f(1.0f, 1.0f, 1.0f);
+		gl.glBegin(GL2.GL_QUADS);
+			gl.glTexCoord2d(0.0, 0.0);
+			gl.glVertex2d(-.1, -.1);
+
+			gl.glTexCoord2d(1.0, 0.0);
+			gl.glVertex2d(.1,  -.1);
+
+			gl.glTexCoord2d(1.0, 1.0);
+			gl.glVertex2d(.1, .1);
+
+			gl.glTexCoord2d(0.0, 1.0);
+			gl.glVertex2d(-.1, .1);
+		gl.glEnd();
+
+		gl.glDisable(GL.GL_TEXTURE_2D);
 	}
 
 
@@ -228,13 +261,13 @@ public class Field extends Shape {
 		double y = convertHeight(view.getHeight()*percentHeight*(1.0/3));
 
 		//Border of rectangle
-		if(view.neonMode)
-		{
-			setColor(gl,View.globR,View.globG,View.globB);
-		}
+		if(view.whichSkin == 0)
+			setColor(gl, 255, 0, 0, 255);
+		else if(view.whichSkin == 1)
+			setColor(gl,view.globR,view.globG,view.globB);
 		else
 		{
-			setColor(gl, 255, 0, 0, 255);
+
 		}
 
 		gl.glBegin(GL2.GL_POLYGON);
@@ -252,10 +285,10 @@ public class Field extends Shape {
 		gl.glEnd();
 
 		// Inside portion of rectangle
-		if(view.neonMode)
-		{
+		if(view.whichSkin == 0)
+			setColor(gl, 68, 214, 243, 200);
+		else if(view.whichSkin == 1)
 			setColor(gl,0,0,0);
-		}
 		else
 		{
 			setColor(gl, 68, 214, 243, 200);
