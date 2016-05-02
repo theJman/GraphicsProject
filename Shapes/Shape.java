@@ -16,8 +16,8 @@ public class Shape {
 	//Instance variables
 	public UUID id = UUID.randomUUID();
 	protected View view;//pointer to the view
-	protected Point2D.Double center;//center position of the shape
-	protected Point2D.Double velocity;//velocity of the shape
+	public Point2D.Double center;//center position of the shape
+	public Point2D.Double velocity;//velocity of the shape
 	protected Point2D.Double acceleration;//acceleration of the shape
 
 	/**

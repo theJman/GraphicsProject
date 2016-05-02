@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import Base.Utilities;
+
 /**
  * Class to manage interactions between circles
  * @author JeremyLittel
@@ -149,6 +151,17 @@ public class CircleInteraction implements Interaction{
 							c2.red = tempr;
 							c2.green = tempg;
 							c2.blue = tempb;
+
+							if(Utilities.getChance(5))
+							{
+								c1.velocity.x *= 1.5;
+								c2.velocity.x *= 1.5;
+							}
+							if(Utilities.getChance(5))
+							{
+								c1.velocity.y *= 1.5;
+								c2.velocity.y *= 1.5;
+							}
 						}
 
 

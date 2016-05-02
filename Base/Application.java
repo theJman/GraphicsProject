@@ -58,10 +58,18 @@ public final class Application
 		JMenu file = new JMenu("File");						// file menu
 		final JMenuItem newgame = new JMenuItem("New Game");// file menu item
 
+		JMenu score = new JMenu("Score Limit");				// score menu
+		final JMenuItem one = new JMenuItem("1");			// score menu item
+		final JMenuItem five = new JMenuItem("5");			// score menu item
+		final JMenuItem ten = new JMenuItem("10");			// score menu item
+		final JMenuItem twentyfive = new JMenuItem("25");	// score menu item
+		final JMenuItem fifty = new JMenuItem("50");		// score menu item
+		final JMenuItem hundred = new JMenuItem("100");		// score menu item
+
 		JMenu skin = new JMenu("Skin"); 					// skin menu
 		final JMenuItem hockey = new JMenuItem("Hockey"); 	// skin menu item
 		final JMenuItem neon = new JMenuItem("Neon");		// skin menu item
-		final JMenuItem third = new JMenuItem("Third");		// skin menu item
+		final JMenuItem invertedNeon = new JMenuItem("Invert");// skin menu item
 
 		JMenu introduce = new JMenu("Reintroduce?");		// reintroduce menu
 		final JMenuItem yes = new JMenuItem("Yes");			// reintroduce menu item
@@ -104,6 +112,7 @@ public final class Application
 
 		// Add menu's to menubar
 		menubar.add(file);
+		menubar.add(score);
 		menubar.add(skin);
 		menubar.add(introduce);
 		menubar.add(west);
@@ -112,10 +121,18 @@ public final class Application
 		// Add file menu items
 		file.add(newgame);
 
+		// Add score menu items
+		score.add(one);
+		score.add(five);
+		score.add(ten);
+		score.add(twentyfive);
+		score.add(fifty);
+		score.add(hundred);
+
 		// Add skin menu items
 		skin.add(hockey);
 		skin.add(neon);
-		skin.add(third);
+		skin.add(invertedNeon);
 
 		// init skin menu items
 		hockey.setEnabled(false);
@@ -190,6 +207,67 @@ public final class Application
 			}
 		});
 
+		// SCORELIMIT - action listeners
+		one.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameLogic.scoreLimit = 1;
+				view.newGame();
+			}
+		});
+
+		five.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameLogic.scoreLimit = 5;
+				view.newGame();
+			}
+		});
+
+		ten.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameLogic.scoreLimit = 10;
+				view.newGame();
+			}
+		});
+
+		twentyfive.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameLogic.scoreLimit = 25;
+				view.newGame();
+			}
+		});
+
+		fifty.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameLogic.scoreLimit = 50;
+				view.newGame();
+			}
+		});
+
+		hundred.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameLogic.scoreLimit = 100;
+				view.newGame();
+			}
+		});
+
 		// SKIN MENU - action listeners
 		hockey.addActionListener(new ActionListener()
 		{
@@ -199,7 +277,7 @@ public final class Application
 				view.whichSkin = 0;
 				hockey.setEnabled(false);
 				neon.setEnabled(true);
-				third.setEnabled(true);
+				invertedNeon.setEnabled(true);
 			}
 		});
 
@@ -211,11 +289,11 @@ public final class Application
 				view.whichSkin = 1;
 				hockey.setEnabled(true);
 				neon.setEnabled(false);
-				third.setEnabled(true);
+				invertedNeon.setEnabled(true);
 			}
 		});
 
-		third.addActionListener(new ActionListener()
+		invertedNeon.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -223,7 +301,7 @@ public final class Application
 				view.whichSkin = 2;
 				hockey.setEnabled(true);
 				neon.setEnabled(true);
-				third.setEnabled(false);
+				invertedNeon.setEnabled(false);
 			}
 		});
 

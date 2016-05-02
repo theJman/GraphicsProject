@@ -61,7 +61,7 @@ public final class KeyHandler extends KeyAdapter
 				view.clear();
 				return;
 
-				//left mallet movement
+				//left player (one) mallet movement
 			case KeyEvent.VK_W:
 				view.getLeftMallet().moveUp();
 				break;
@@ -75,18 +75,69 @@ public final class KeyHandler extends KeyAdapter
 				view.getLeftMallet().moveRight();
 				break;
 
-				//right mallet movement
+				// left player(one) do powerup
+			case KeyEvent.VK_Q:
+				view.doPowerup("left");
+				break;
+
+			case KeyEvent.VK_E:
+				view.doDefense("left");
+				break;
+
+				//right player (two) mallet movement
 			case KeyEvent.VK_UP:
-				view.getRightMallet().moveUp();
+				if(!view.getRightMallet().stop)
+					view.getRightMallet().moveUp();
 				break;
 			case KeyEvent.VK_DOWN:
-				view.getRightMallet().moveDown();
+				if(!view.getRightMallet().stop)
+					view.getRightMallet().moveDown();
 				break;
 			case KeyEvent.VK_LEFT:
-				view.getRightMallet().moveLeft();
+				if(!view.getRightMallet().stop)
+					view.getRightMallet().moveLeft();
 				break;
 			case KeyEvent.VK_RIGHT:
-				view.getRightMallet().moveRight();
+				if(!view.getRightMallet().stop)
+					view.getRightMallet().moveRight();
+				break;
+
+				// right player do powerup
+			case KeyEvent.VK_PERIOD:
+				view.doPowerup("right");
+				break;
+
+			case KeyEvent.VK_SLASH:
+				view.doDefense("right");
+				break;
+
+				// Displaymode powerups
+			case KeyEvent.VK_1:
+				if(view.displaymode)
+					view.startLeftPowerup(1);
+				break;
+
+			case KeyEvent.VK_2:
+				if(view.displaymode)
+					view.startLeftPowerup(2);
+				break;
+
+			case KeyEvent.VK_3:
+				if(view.displaymode)
+					view.startLeftPowerup(3);
+				break;
+
+			case KeyEvent.VK_4:
+				if(view.displaymode)
+					view.startLeftPowerup(4);
+				break;
+
+			case KeyEvent.VK_5:
+				if(view.displaymode)
+				{
+					GameLogic.leftPlayerScore = 50;
+					GameLogic.checkLeftWin();
+				}
 				break;
 		}
 

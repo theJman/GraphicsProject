@@ -17,10 +17,17 @@ import com.jogamp.opengl.GLAutoDrawable;
  */
 public class Mallet extends Circle {
 
-	private final double moveSpeed = .001;
-	private final double moveAccel = .01;
-	private final double maxVel = .035;
+	// Mallet stock variables: moveSpeed = .001, moveAccel = .01, maxVel = .035
+	public double defaultSpeed = .001;
+	public double defaultAccel = .01;
+	public double defaultMax = .035;
+
+	public double moveSpeed = .001;
+	public double moveAccel = .01;
+	public double maxVel = .035;
 	protected boolean isLeft;
+
+	public boolean stop = false;
 
 	/**
 	 * @param nView
@@ -93,31 +100,30 @@ public class Mallet extends Circle {
 	public void update(GLAutoDrawable drawable) {
 		super.update(drawable);
 
-		//make sure that it stays on it's own side
-		if((isLeft && center.x > 0) || (!isLeft && center.x < 0)){
-			center.x = 0;
-			velocity.x = 0;
-			acceleration.x = 0;
-		}
+			//make sure that it stays on it's own side
+			if((isLeft && center.x > 0) || (!isLeft && center.x < 0)){
+				center.x = 0;
+				velocity.x = 0;
+				acceleration.x = 0;
+			}
 
-		//make sure that we aren't going to fast
-		if(velocity.x > maxVel){
-			velocity.x = maxVel;
-			acceleration.x = 0;
-		}
-		else if(velocity.x < -maxVel){
-			velocity.x = -maxVel;
-			acceleration.x = 0;
-		}
-		else if(velocity.y > maxVel){
-			velocity.y = maxVel;
-			acceleration.y = 0;
-		}
-		else if(velocity.y < -maxVel){
-			velocity.y = -maxVel;
-			acceleration.y = 0;
-		}
-
+			//make sure that we aren't going to fast
+			if(velocity.x > maxVel){
+				velocity.x = maxVel;
+				acceleration.x = 0;
+			}
+			else if(velocity.x < -maxVel){
+				velocity.x = -maxVel;
+				acceleration.x = 0;
+			}
+			else if(velocity.y > maxVel){
+				velocity.y = maxVel;
+				acceleration.y = 0;
+			}
+			else if(velocity.y < -maxVel){
+				velocity.y = -maxVel;
+				acceleration.y = 0;
+			}
 	}
 
 	@Override
@@ -127,13 +133,11 @@ public class Mallet extends Circle {
 		GL2		gl = drawable.getGL().getGL2();
 
 		if(view.whichSkin == 0)
-			drawCircle(gl, true, radius, 0,255,0);
+			drawCircle(gl, true, radius, 255,0,0);
 		else if(view.whichSkin == 1)
 			drawCircle(gl, true, radius, view.globR,view.globG,view.globB);
-		else
-		{
-
-		}
+		else if(view.whichSkin == 2)
+			drawCircle(gl, true, radius, 0,0,0);
 	}
 
 }

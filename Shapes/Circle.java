@@ -21,7 +21,8 @@ import com.jogamp.opengl.GLAutoDrawable;
  */
 public class Circle extends Shape {
 
-	protected double radius = 100;
+	public double defaultRadius = 100;
+	public double radius = 100;
 	protected int cantBounceTick = 0;//only can bounce when this is 0. Added so cicles cannot stick together!:)
 	protected int mass = 1;//default mass
 
@@ -50,6 +51,9 @@ public class Circle extends Shape {
 		this.puck = puck;
 		points = new ArrayList<Point2D.Double>();
 
+		// if its a mallet make it a little bigger
+		if(!this.puck) radius = 125;
+
 		// Randomly initialize the pucks outlining colors for the regular view
 		Random rand = new Random();
 		red = 0.0 + (255.0 - 0.0) * rand.nextDouble();
@@ -57,7 +61,7 @@ public class Circle extends Shape {
 		blue = 0.0 + (255.0 - 0.0) * rand.nextDouble();
 
 		if(puck)
-			radius = 25.0 + (125.0 - 25.0) * rand.nextDouble();
+			radius = 50.0 + (125.0 - 50.0) * rand.nextDouble();
 	}
 
 	@Override
@@ -71,12 +75,12 @@ public class Circle extends Shape {
 			if(center.x - convertWidth(radius) < -x*.9 && center.y + convertHeight(radius) < y && center.y - convertHeight(radius) > -y)
 			{
 				scored = true;
-				view.scoreDirection = "left";
+				view.scoreDirection = "right";
 			}
 			else if(center.x + convertWidth(radius) > x*.9 && center.y + convertHeight(radius) < y && center.y - convertHeight(radius) > -y)
 			{
 				scored = true;
-				view.scoreDirection = "right";
+				view.scoreDirection = "left";
 			}
 		}
 	}
@@ -90,8 +94,9 @@ public class Circle extends Shape {
 			drawCircle(gl, true, radius, 0,255,0);
 		else if(view.whichSkin == 1)
 			drawCircle(gl, true, radius, view.globR,view.globG,view.globB);
-		else
-		{}
+		else if(view.whichSkin == 2)
+			drawCircle(gl, true, radius, 0,0,0);
+
 	}
 
 	/**
@@ -118,28 +123,30 @@ public class Circle extends Shape {
 	 * @param alpha
 	 */
 	protected void drawCircle(GL2 gl, boolean logPoints, double radius, double red, double green, double blue, double alpha){
-		if(puck)
+		if(this instanceof Puck)
 		{
 			if(specialpuck)
 			{
 				if(view.whichSkin == 0)
-					setColor(gl,view.globR,view.globG,view.globB, alpha);
+					setColor(gl,view.globR,view.globG,view.globB);
 				else if(view.whichSkin == 1)
-					setColor(gl,255,255,255, alpha);
-				else if(view.whichSkin == 2);
+					setColor(gl,255,255,255);
+				else if(view.whichSkin == 2)
+					setColor(gl,255,255,255);
 			}
 			else
 			{
 				if(view.whichSkin == 0)
-					setColor(gl, this.red, this.green, this.blue, alpha);
+					setColor(gl, this.red, this.green, this.blue);
 				else if(view.whichSkin == 1)
-					setColor(gl, red, green, blue, alpha);
+					setColor(gl, red, green, blue);
 				else if(view.whichSkin == 2)
-					setColor(gl, red, green, blue, alpha);
+					setColor(gl, red, green, blue);
 			}
 		}
 		else
-			setColor(gl,red,green,blue, alpha);
+			setColor(gl, red, green, blue);
+
 
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		gl.glVertex2d(center.x, center.y);
@@ -157,18 +164,25 @@ public class Circle extends Shape {
 		}
 		gl.glEnd();
 
-		if(puck)
+		if(this instanceof Puck)
 		{
 			if(specialpuck)
 			{
 				if(view.whichSkin == 0)
-					setColor(gl,view.globR,view.globG,view.globB, alpha);
+					setColor(gl,view.globR,view.globG,view.globB);
 				else if(view.whichSkin == 1)
-					setColor(gl,255,255,255,alpha);
-				else if(view.whichSkin == 2);
+					setColor(gl,255,255,255);
+				else if(view.whichSkin == 2)
+					setColor(gl,255,255,255);
 			}
 			else
-				setColor(gl, 0,0,0,255);
+			{	if(view.whichSkin == 0)
+					setColor(gl,0,0,0);
+				else if(view.whichSkin == 1)
+					setColor(gl,0,0,0);
+				else if(view.whichSkin == 2)
+					setColor(gl,255,255,255);
+			}
 		}
 
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
@@ -200,7 +214,7 @@ public class Circle extends Shape {
 			else if(view.whichSkin == 1)
 				setColor(gl, 255,255,255);
 			else if(view.whichSkin == 2)
-				setColor(gl, red, green, blue);
+				setColor(gl, 255,255,255);
 		}
 		else
 		{
@@ -209,9 +223,10 @@ public class Circle extends Shape {
 			else if(view.whichSkin == 1)
 				setColor(gl, view.globR, view.globG, view.globB);
 			else if(view.whichSkin == 2)
-				setColor(gl, red, green, blue);
+				setColor(gl, 0,0,0);
 		}
 
+		gl.glLineWidth(5.0f);
 		double dist = Math.abs(convertWidth(radius) - Math.sqrt( (convertWidth(radius) * convertWidth(radius)) + (convertHeight(radius) * convertHeight(radius)) ));
 		gl.glBegin(GL2.GL_LINES);
 			// Draw west spark

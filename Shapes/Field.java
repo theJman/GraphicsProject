@@ -1,11 +1,16 @@
 package Shapes;
 
 
+import java.awt.Color;
+import java.awt.Font;
+
+import Base.GameLogic;
 import Base.View;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.texture.Texture;
 
 /**
@@ -19,6 +24,7 @@ public class Field extends Shape {
 	protected double percentHeight = 1.0;
 	protected double percentWidth = 1.0;
 	protected double radius = (percentHeight*percentWidth)/.00275;
+	GLAutoDrawable draw = null;
 
 	/**
 	 *
@@ -31,6 +37,9 @@ public class Field extends Shape {
 	@Override
 	public void update(GLAutoDrawable drawable){
 		super.update(drawable);
+
+		if(draw == null)
+			draw = drawable;
 	}
 
 	@Override
@@ -41,16 +50,107 @@ public class Field extends Shape {
 			drawField(gl,255,255,255);
 		else if(view.whichSkin == 1)
 			drawField(gl,0,0,0);
-		else
-		{
+		else if(view.whichSkin == 2)
+			drawField(gl,view.globR,view.globG,view.globB);
 
-		}
-
+;
 		drawLines(gl);
 		drawCircles(gl);
 		drawGoalBoundary(gl);
+		drawPowerups(gl);
+		drawScore(gl);
 		if(view.whichSkin == 0 && !view.whichTeam.equals("none"))
 			drawImageCenterIce(gl); // only draw logo if it is the hockey skin and a team is selected
+		if(GameLogic.winner)
+			drawWon();
+	}
+
+	private void drawWon()
+	{
+		int height = draw.getSurfaceHeight();
+		int width = draw.getSurfaceWidth();
+
+		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 200));
+		renderer.beginRendering(width, height);
+
+		if(view.whichSkin == 0) // regular
+			renderer.setColor(Color.BLACK);
+		else if(view.whichSkin == 1) // nean
+			renderer.setColor(new Color(view.globR, view.globG, view.globB));
+		else
+			renderer.setColor(Color.BLACK);
+
+		int leftScore = GameLogic.leftPlayerScore;
+		int rightScore = GameLogic.rightPlayerScore;
+		if(leftScore > rightScore)
+		{
+			renderer.draw("LEFT PLAYER WINS!!!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.6));
+			renderer.draw("RIGHT PLAYER SUCKS!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.4));
+		}
+		else
+		{
+			renderer.draw("RIGHT PLAYER WINS!!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.6));
+			renderer.draw("LEFT PLAYER SUCKS!!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.4));
+
+		}
+
+		renderer.endRendering();
+	}
+
+	private void drawPowerups(GL2 gl)
+	{
+		int height = draw.getSurfaceHeight();
+		int width = draw.getSurfaceWidth();
+
+		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 100));
+		renderer.beginRendering(width, height);
+
+		if(view.whichSkin == 0) // regular
+			renderer.setColor(Color.BLACK);
+		else if(view.whichSkin == 1) // nean
+			renderer.setColor(new Color(view.globR, view.globG, view.globB));
+		else
+			renderer.setColor(Color.BLACK);
+
+		if(GameLogic.leftPlayerScore < 10)
+		{
+			renderer.draw(Integer.toString(0) + Integer.toString(GameLogic.leftPlayerScore), (int) (view.getWidth()*.35), (int) (view.getHeight()*.5));
+		}
+		else
+		{
+			renderer.draw(Integer.toString(GameLogic.leftPlayerScore), (int) (view.getWidth()*.35), (int) (view.getHeight()*.5));
+		}
+		if(GameLogic.rightPlayerScore < 10)
+		{
+			renderer.draw(Integer.toString(0) + Integer.toString(GameLogic.rightPlayerScore),(int) (view.getWidth()*.59), (int) (view.getHeight()*.5));
+		}
+		else
+		{
+			renderer.draw(Integer.toString(GameLogic.rightPlayerScore),(int) (view.getWidth()*.59), (int) (view.getHeight()*.5));
+		}
+
+		renderer.endRendering();
+	}
+
+	private void drawScore(GL2 gl)
+	{
+		int height = draw.getSurfaceHeight();
+		int width = draw.getSurfaceWidth();
+
+		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 50));
+		renderer.beginRendering(width, height);
+
+		if(view.whichSkin == 0) // regular
+			renderer.setColor(Color.BLACK);
+		else if(view.whichSkin == 1) // nean
+			renderer.setColor(new Color(view.globR, view.globG, view.globB));
+		else
+			renderer.setColor(Color.BLACK);
+
+		//Have to subtract 85 from player one's x point for some reason
+		renderer.draw("Powerups: " + Integer.toString(GameLogic.leftPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.leftPlayerDefense.size()), (int) (view.getWidth()*-.001), (int) (view.getHeight()*.96));
+		renderer.draw("Powerups: " + Integer.toString(GameLogic.rightPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.rightPlayerDefense.size()), (int) (view.getWidth()*.7), (int) (view.getHeight()*.96));
+		renderer.endRendering();
 	}
 
 	private void drawField(GL2 gl, double red, double green, double blue){
@@ -79,10 +179,8 @@ public class Field extends Shape {
 				setColor(gl,255,0,0);
 			else if(view.whichSkin == 1)
 				setColor(gl,view.globR,view.globG,view.globB);
-			else
-			{
-
-			}
+			else if(view.whichSkin == 2)
+				setColor(gl,0,0,0);
 
 			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*percentHeight*.9));
 			gl.glVertex2d(convertWidth(view.getWidth()*0), convertHeight(view.getHeight()*-percentHeight*.9));
@@ -92,13 +190,9 @@ public class Field extends Shape {
 			if(view.whichSkin == 0)
 				setColor(gl,68,214,243);
 			else if(view.whichSkin == 1)
-			{
 				setColor(gl,view.globR,view.globG,view.globB);
-			}
-			else
-			{
-
-			}
+			else if(view.whichSkin == 2)
+				setColor(gl,0,0,0);
 
 			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*percentHeight*.9));
 			gl.glVertex2d(convertWidth(view.getWidth()*-(1.0/3)*percentWidth), convertHeight(view.getHeight()*-percentHeight*.9));
@@ -109,8 +203,6 @@ public class Field extends Shape {
 	}
 
 	private void drawCircles(GL2 gl){
-
-		// TODO circle size is currently hard coded. need to do it as a percentage with the window size
 
 		double x = convertWidth(view.getWidth()*(1.0/1.75));
 		double y = convertHeight(view.getHeight()*(1.0/2));
@@ -131,9 +223,13 @@ public class Field extends Shape {
 			drawCircle(gl,radius*.7,-x,-y,view.globR,view.globG,view.globB);		// Left bottom circle
 			drawCircle(gl,radius*.7,x,-y,view.globR,view.globG,view.globB);		// Right bottom circle
 		}
-		else
+		else if(view.whichSkin == 2)
 		{
-
+			drawCircle(gl,radius,0,0,0,0,0);		// Center circle
+			drawCircle(gl,radius*.7,-x,y,0,0,0);		// Left top circle
+			drawCircle(gl,radius*.7,x,y,0,0,0);		// Right top circle
+			drawCircle(gl,radius*.7,-x,-y,0,0,0);		// Left bottom circle
+			drawCircle(gl,radius*.7,x,-y,0,0,0);		// Right bottom circle
 		}
 
 
@@ -165,10 +261,9 @@ public class Field extends Shape {
 			setColor(gl,255,255,255);
 		else if(view.whichSkin == 1)
 			setColor(gl,0,0,0);
-		else
-		{
-			setColor(gl,255,255,255);
-		}
+		else if(view.whichSkin == 2)
+			setColor(gl,view.globR,view.globG,view.globB);
+
 		gl.glVertex2d(centerX, centerY);
 		for (int i=0; i<=32; i++)
 		{
@@ -265,10 +360,8 @@ public class Field extends Shape {
 			setColor(gl, 255, 0, 0, 255);
 		else if(view.whichSkin == 1)
 			setColor(gl,view.globR,view.globG,view.globB);
-		else
-		{
-
-		}
+		else if(view.whichSkin == 2)
+			setColor(gl,0,0,0);
 
 		gl.glBegin(GL2.GL_POLYGON);
 			gl.glVertex2d(x*.9, y);
@@ -290,9 +383,7 @@ public class Field extends Shape {
 		else if(view.whichSkin == 1)
 			setColor(gl,0,0,0);
 		else
-		{
-			setColor(gl, 68, 214, 243, 200);
-		}
+			setColor(gl, view.globR,view.globG,view.globB);
 
 		gl.glBegin(GL2.GL_POLYGON);
 			gl.glVertex2d(x*.9, y*.95);

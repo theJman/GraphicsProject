@@ -63,6 +63,16 @@ public final class View
 	public int specialpuckChance = 1;
 	public boolean specialpuckExists = false;
 
+	public boolean displaymode = true;
+
+	// TODO
+	public int leftPowerup = -1;
+	public int rightPowerup = -1;
+	public int leftStart = 0;
+	public int leftEnd = 0;
+	public int rightStart = 0;
+	public int rightEnd = 0;
+
 
 	//**********************************************************************
 	// Private Members
@@ -96,6 +106,8 @@ public final class View
 
 	private int							frameCounter;
 	private int							neonSlowFactor;
+
+	private GLAutoDrawable draw = null;
 
 	//**********************************************************************
 	// Constructors and Finalizer
@@ -364,10 +376,14 @@ public final class View
 	//**********************************************************************
 	// Private Methods (Rendering)
 	//**********************************************************************
-
 	private void	update(GLAutoDrawable drawable)
 	{
 		counter++;								// Counters are useful, right?
+
+		if(leftPowerup != -1)
+			checkLeftPowerup();
+		if(rightPowerup != -1)
+			checkRightPowerup();
 
 		//update the interactions
 		for(Interaction i : shapeInteractions){
@@ -385,6 +401,7 @@ public final class View
 				circlesInteraction.deleteCircle(s.id);
 				wallInteraction.deleteCircle(s.id);
 				shapes.remove(i);
+				puckcounter -= 1;
 				if(reintroduce == true) addPuck();
 			}
 
@@ -394,7 +411,7 @@ public final class View
 		gameLogic.update(drawable);
 		canvas.repaint();
 
-		doPowerups();
+		specialPuck();
 	}
 
 	private void	render(GLAutoDrawable drawable)
@@ -404,17 +421,31 @@ public final class View
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);		// Clear the buffer
 
 		if(teamlist.isEmpty())
+		{
+			draw = drawable;
 			loadTeams(drawable);
-
-		//render the shapes
-		for (Shape s : shapes) {
-			s.render(drawable);
 		}
 
-		// Render the scores -- MOVE THIS TO FIELD
-		gameLogic.render(drawable);
-	}
+		//render the shapes
+		if(GameLogic.winner)
+		{
+			int win = -1;
+			for(int i = 0; i < shapes.size(); i++)
+			{
+				if(shapes.get(i) instanceof Field)
+					win = i;
+				else
+					shapes.get(i).render(drawable);
+			}
+			shapes.get(win).render(drawable);
+		}
+		else
+		{
+			for(Shape s : shapes)
+				s.render(drawable);
+		}
 
+	}
 	//**********************************************************************
 	// Private Methods (Scene)
 	//**********************************************************************
@@ -451,6 +482,7 @@ public final class View
 		}
 	}
 
+	private int puckcounter = 0;
 	/**
 	 * Adds a new puck
 	 *
@@ -466,10 +498,12 @@ public final class View
 		circlesInteraction.addCircle(newPuck);
 		wallInteraction.addCircle(newPuck);
 		shapes.add(newPuck);
+		puckcounter += 1;
 	}
 
-	private void doPowerups()
+	private void specialPuck()
 	{
+		// This powerup will potentially highlight one puck that will make it worth 2 times the score
 		if(Utilities.getChance(specialpuckChance) && !specialpuckExists)
 		{
 			for(Shape s : shapes)
@@ -483,7 +517,224 @@ public final class View
 				}
 			}
 		}
+	}
 
+	// TODO
+	public void doPowerup(String which)
+	{
+		if(which.equals("left"))
+		{
+			if(GameLogic.leftPlayerPowerup.isEmpty()) return;
+			startLeftPowerup(GameLogic.leftPlayerPowerup.pop());
+		}
+		else if(which.equals("right"))
+		{
+			if(GameLogic.rightPlayerPowerup.isEmpty()) return;
+			startRightPowerup(GameLogic.rightPlayerPowerup.pop());
+		}
+	}
+
+	public void doDefense(String which)
+	{
+		if(which.equals("left"))
+		{
+			if(GameLogic.leftPlayerDefense.isEmpty()) return;
+			startLeftPowerup(4);
+		}
+		else if(which.equals("right"))
+		{
+			if(GameLogic.rightPlayerDefense.isEmpty()) return;
+			startRightPowerup(4);
+		}
+	}
+
+	public void startLeftPowerup(int powerup)
+	{
+		switch(powerup)
+		{
+
+			case 1:		// freeze opponents mallet powerup for x seconds
+				leftPowerup = 1;
+				leftEnd = counter + 30;
+				rightMallet.stop = true;
+				break;
+
+			case 2:		// make oppoents mallet small for x seconds
+				leftPowerup = 2;
+				leftEnd = counter + 30;
+				rightMallet.radius = rightMallet.radius * .25;
+				break;
+
+			case 3:		// fire all pucks directly toward the opponent
+				leftPowerup = 3;
+				for(Shape s : shapes)
+				{
+					if(s instanceof Puck)
+					{
+						if(s.center.x < 0 && s.center.y > .4)
+						{
+							// top left quadrant
+							s.velocity.x = .1;
+							s.velocity.y = -.035;
+						}
+						else if(s.center.y > -.5 && s.center.y < .4)
+						{
+							// mid quadrant
+							s.velocity.x = .1;
+							s.velocity.y = 0.0;
+						}
+						else if(s.center.x < 0 && s.center.y < -.4)
+						{
+							// bottom left quadrant
+							s.velocity.x = .1;
+							s.velocity.y = .035;
+						}
+						else if(s.center.x > 0 && s.center.y > .4)
+						{
+							// top right quadrant
+							s.velocity.x = .1;
+							s.velocity.y = -.08;
+						}
+						else if(s.center.x > 0 && s.center.y < -.4)
+						{
+							// bottom right quadrant
+							s.velocity.x = .1;
+							s.velocity.y = .08;
+						}
+					}
+				}
+				break;
+
+			case 4:
+				for(Shape s : shapes)
+				{
+					if(s instanceof Puck)
+					{
+						if(s.center.x <= 0.0)
+						{
+							s.velocity.x = 0.0;
+							s.velocity.y = 0.0;
+							GameLogic.leftPlayerDefense.pop();
+						}
+					}
+				}
+				break;
+		}
+	}
+
+	public void checkLeftPowerup()
+	{
+		switch(leftPowerup)
+		{
+			case 1:
+				if(counter == leftEnd)
+				{
+					rightMallet.stop = false;
+					leftPowerup = -1;
+				}
+				break;
+			case 2:
+				if(counter == leftEnd)
+				{
+					rightMallet.radius = rightMallet.defaultRadius;
+					leftPowerup = -1;
+				}
+		}
+	}
+
+	public void startRightPowerup(int powerup)
+	{
+		switch(powerup)
+		{
+
+			case 1:		// freeze opponents mallet powerup for x seconds
+				rightPowerup = 1;
+				rightEnd = counter + 35;
+				leftMallet.stop = true;
+				break;
+
+			case 2:		// make oppoents mallet small for x seconds
+				rightPowerup = 2;
+				rightEnd = counter + 35;
+				leftMallet.radius = leftMallet.radius * .25;
+				break;
+
+			case 3:		// fire all pucks directly toward the opponent
+				rightPowerup = 3;
+				for(Shape s : shapes)
+				{
+					if(s instanceof Puck)
+					{
+						if(s.center.x > 0 && s.center.y > .4)
+						{
+							// top right quadrant
+							s.velocity.x = -.1;
+							s.velocity.y = -.035;
+						}
+						else if(s.center.y > -.5 && s.center.y < .4)
+						{
+							// mid quadrant
+							s.velocity.x = -.1;
+							s.velocity.y = 0.0;
+						}
+						else if(s.center.x > 0 && s.center.y < -.4)
+						{
+							// bottom right quadrant
+							s.velocity.x = -.1;
+							s.velocity.y = .035;
+						}
+						else if(s.center.x < 0 && s.center.y > .4)
+						{
+							// top left quadrant
+							s.velocity.x = -.1;
+							s.velocity.y = -.08;
+						}
+						else if(s.center.x < 0 && s.center.y < -.4)
+						{
+							// bottom left quadrant
+							s.velocity.x = -.1;
+							s.velocity.y = .08;
+						}
+					}
+				}
+				break;
+
+			case 4:
+				for(Shape s : shapes)
+				{
+					if(s instanceof Puck)
+					{
+						if(s.center.x >= 0.0)
+						{
+							s.velocity.x = 0.0;
+							s.velocity.y = 0.0;
+							GameLogic.rightPlayerDefense.pop();
+						}
+					}
+				}
+				break;
+		}
+	}
+
+	public void checkRightPowerup()
+	{
+		switch(rightPowerup)
+		{
+			case 1:
+				if(counter == rightEnd)
+				{
+					leftMallet.stop = false;
+					rightPowerup = -1;
+				}
+				break;
+
+			case 2:
+				if(counter == rightEnd)
+				{
+					leftMallet.radius = leftMallet.defaultRadius;
+					rightPowerup = -1;
+				}
+		}
 	}
 
 	private void updateColor(){
@@ -556,6 +807,8 @@ public final class View
 			{
 				id = shapes.get(i).id;
 				shapes.remove(i);
+				puckcounter -= 1;
+				break;
 			}
 		}
 
@@ -573,17 +826,22 @@ public final class View
 	{
 		deleteAllPucks();
 		resetMallets();
-		resetScores();
+		resetGameLogic();
 		addPuck();
 	}
 
 	/**
-	 * Resets scores to 0
+	 * Resets powerups, scores, and winner
 	 */
-	public void resetScores()
+	public void resetGameLogic()
 	{
-		gameLogic.leftPlayerScore = 0;
-		gameLogic.rightPlayerScore = 0;
+		GameLogic.winner = false;
+		GameLogic.leftPlayerScore = 0;
+		GameLogic.rightPlayerScore = 0;
+		GameLogic.leftPlayerDefense.clear();
+		GameLogic.leftPlayerPowerup.clear();
+		GameLogic.rightPlayerDefense.clear();
+		GameLogic.rightPlayerPowerup.clear();
 	}
 
 	/**
@@ -603,17 +861,8 @@ public final class View
 	 */
 	private void deleteAllPucks()
 	{
-		for(int i = 0; i < shapes.size(); i++)
-		{
-			Shape s = shapes.get(i);
-			UUID id = s.id;
-			if(s instanceof Puck)
-			{
-				shapes.remove(i);
-				circlesInteraction.deleteCircle(id);
-				wallInteraction.deleteCircle(id);
-			}
-		}
+		// remove all pucks
+		while(puckcounter > 0) deletePuck();
 	}
 }
 

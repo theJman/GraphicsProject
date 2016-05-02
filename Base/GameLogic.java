@@ -3,64 +3,51 @@
  */
 package Base;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.util.Random;
+import java.util.Stack;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.util.awt.TextRenderer;
 
 /**
- * @author TreMcP
  *
  */
 public class GameLogic {
 
 	protected View 	view;//pointer to the view
 
-	protected int	rightPlayerScore;
-	protected int	leftPlayerScore;
+	public static int	rightPlayerScore;
+	public static int	leftPlayerScore;
+
+	public static Stack<Integer> leftPlayerPowerup = new Stack<Integer>();
+	public static Stack<Integer> leftPlayerDefense = new Stack<Integer>();
+	public static int leftPlayerStreak = 0;
+
+	public static Stack<Integer> rightPlayerPowerup = new Stack<Integer>();
+	public static Stack<Integer> rightPlayerDefense = new Stack<Integer>();
+	public static int rightPlayerStreak = 0;
+
+	public static int scoreLimit = 10;
+
+	public static boolean winner = false;
+	public static String strWin = "";
 
 
 	GameLogic(View view) {
 		this.view = view;
-		this.rightPlayerScore = 0;
-		this.leftPlayerScore = 0;
+		rightPlayerScore = 0;
+		leftPlayerScore = 0;
 	}
 
 	public void update(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
 
-
-
 	}
 
 	public void render(GLAutoDrawable drawable){
 		GL2		gl = drawable.getGL().getGL2();
-		renderScores(drawable, rightPlayerScore, leftPlayerScore);
 	}
 
-	private void renderScores(GLAutoDrawable drawable, int p1score, int p2score) {
-
-		int height = drawable.getSurfaceHeight();
-		int width = drawable.getSurfaceWidth();
-
-		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 12));
-		renderer.beginRendering(width, height);
-
-		if(view.whichSkin == 0) // regular
-			renderer.setColor(Color.BLACK);
-		else if(view.whichSkin == 1) // nean
-			renderer.setColor(Color.YELLOW);
-		else
-		{
-			// ??
-		}
-		//Have to subtract 85 from player one's x point for some reason
-		renderer.draw("Player One: " + Integer.toString(p1score), (int) ((1 * width/4) - .5*renderer.getBounds(Integer.toString(p1score)).getWidth() - 85), height - 15);
-		renderer.draw("Player Two: " + Integer.toString(p2score), (int) ((3 * width/4) - .5*renderer.getBounds(Integer.toString(p2score)).getWidth()), height - 15);
-		renderer.endRendering();
-	}
 
 
 	public void incrementScore(String which, boolean bonus)
@@ -70,13 +57,85 @@ public class GameLogic {
 	}
 
 	private void increaseRightPlayerScore(boolean bonus) {
-		if(bonus) this.rightPlayerScore += 2;
-		else this.rightPlayerScore++;
+		if(bonus) rightPlayerScore += 2;
+		else rightPlayerScore++;
+		leftPlayerStreak = 0;
+		checkRightWin();
+		checkRightPow();
 	}
 
 	private void increaseLeftPlayerScore(boolean bonus) {
-		if(bonus) this.leftPlayerScore += 2;
-		else this.leftPlayerScore++;
+		if(bonus) leftPlayerScore += 2;
+		else leftPlayerScore++;
+		rightPlayerStreak = 0;
+		checkLeftWin();
+		checkLeftPow();
+	}
+
+	private void checkRightWin()
+	{
+		if(rightPlayerScore >= scoreLimit)
+		{
+			winner = true;
+			strWin = "Player Two";
+		}
+	}
+
+	private void checkRightPow()
+	{
+		boolean givePowerup = false;
+		switch(rightPlayerStreak)
+		{
+			case 0: givePowerup = Utilities.getChance(100); break;
+			case 1: givePowerup = Utilities.getChance(20); break;
+			case 2: givePowerup = Utilities.getChance(30); break;
+			case 3: givePowerup = Utilities.getChance(40); break;
+			default: givePowerup = Utilities.getChance(50); break;
+		}
+		if(givePowerup)
+		{
+			int pow = whichPow();
+			if(pow == 4)
+				rightPlayerDefense.push(pow);
+			else
+				rightPlayerPowerup.push(pow);
+		}
+	}
+
+	public static void checkLeftWin()
+	{
+		if(leftPlayerScore >= scoreLimit)
+		{
+			winner = true;
+			strWin = "Player One";
+		}
+	}
+
+	private void checkLeftPow()
+	{
+		boolean givePowerup = false;
+		switch(leftPlayerStreak)
+		{
+			case 0: givePowerup = Utilities.getChance(100); break;
+			case 1: givePowerup = Utilities.getChance(20); break;
+			case 2: givePowerup = Utilities.getChance(30); break;
+			case 3: givePowerup = Utilities.getChance(40); break;
+			default: givePowerup = Utilities.getChance(50); break;
+		}
+		if(givePowerup)
+		{
+			int pow = whichPow();
+			if(pow == 4)
+				leftPlayerDefense.push(pow);
+			else
+				leftPlayerPowerup.push(pow);
+		}
+	}
+
+	private int whichPow()
+	{
+		Random rand = new Random();
+		return rand.nextInt(4) + 1;
 	}
 
 }

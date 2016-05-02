@@ -184,7 +184,7 @@ public class Edge extends Shape {
 		}
 		else if(view.whichSkin == 2)
 		{
-
+			red = 0; green = 0; blue = 0;
 		}
 
 		gl.glBegin(GL2.GL_LINES);
