@@ -86,11 +86,11 @@ public class GameLogic {
 		boolean givePowerup = false;
 		switch(rightPlayerStreak)
 		{
-			case 0: givePowerup = Utilities.getChance(100); break;
-			case 1: givePowerup = Utilities.getChance(20); break;
-			case 2: givePowerup = Utilities.getChance(30); break;
-			case 3: givePowerup = Utilities.getChance(40); break;
-			default: givePowerup = Utilities.getChance(50); break;
+			case 0: givePowerup = Utilities.getChance(20); break;
+			case 1: givePowerup = Utilities.getChance(30); break;
+			case 2: givePowerup = Utilities.getChance(40); break;
+			case 3: givePowerup = Utilities.getChance(50); break;
+			default: givePowerup = Utilities.getChance(60); break;
 		}
 		if(givePowerup)
 		{
@@ -116,11 +116,11 @@ public class GameLogic {
 		boolean givePowerup = false;
 		switch(leftPlayerStreak)
 		{
-			case 0: givePowerup = Utilities.getChance(100); break;
 			case 1: givePowerup = Utilities.getChance(20); break;
 			case 2: givePowerup = Utilities.getChance(30); break;
 			case 3: givePowerup = Utilities.getChance(40); break;
-			default: givePowerup = Utilities.getChance(50); break;
+			case 4: givePowerup = Utilities.getChance(50); break;
+			default: givePowerup = Utilities.getChance(60); break;
 		}
 		if(givePowerup)
 		{

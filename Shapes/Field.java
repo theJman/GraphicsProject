@@ -1,7 +1,6 @@
 package Shapes;
 
 
-import java.awt.Color;
 import java.awt.Font;
 
 import Base.GameLogic;
@@ -62,10 +61,10 @@ public class Field extends Shape {
 		if(view.whichSkin == 0 && !view.whichTeam.equals("none"))
 			drawImageCenterIce(gl); // only draw logo if it is the hockey skin and a team is selected
 		if(GameLogic.winner)
-			drawWon();
+			drawWon(gl);
 	}
 
-	private void drawWon()
+	private void drawWon(GL2 gl)
 	{
 		int height = draw.getSurfaceHeight();
 		int width = draw.getSurfaceWidth();
@@ -74,11 +73,11 @@ public class Field extends Shape {
 		renderer.beginRendering(width, height);
 
 		if(view.whichSkin == 0) // regular
-			renderer.setColor(Color.BLACK);
+			setColor(gl, 0,0,0);
 		else if(view.whichSkin == 1) // nean
-			renderer.setColor(new Color(view.globR, view.globG, view.globB));
+			setColor(gl,view.globR, view.globG, view.globB);
 		else
-			renderer.setColor(Color.BLACK);
+			setColor(gl, 0,0,0);
 
 		int leftScore = GameLogic.leftPlayerScore;
 		int rightScore = GameLogic.rightPlayerScore;
@@ -106,11 +105,11 @@ public class Field extends Shape {
 		renderer.beginRendering(width, height);
 
 		if(view.whichSkin == 0) // regular
-			renderer.setColor(Color.BLACK);
+			setColor(gl, 0,0,0);
 		else if(view.whichSkin == 1) // nean
-			renderer.setColor(new Color(view.globR, view.globG, view.globB));
+			setColor(gl,view.globR, view.globG, view.globB);
 		else
-			renderer.setColor(Color.BLACK);
+			setColor(gl, 0,0,0);
 
 		if(GameLogic.leftPlayerScore < 10)
 		{
@@ -141,11 +140,11 @@ public class Field extends Shape {
 		renderer.beginRendering(width, height);
 
 		if(view.whichSkin == 0) // regular
-			renderer.setColor(Color.BLACK);
+			setColor(gl, 0,0,0);
 		else if(view.whichSkin == 1) // nean
-			renderer.setColor(new Color(view.globR, view.globG, view.globB));
+			setColor(gl,view.globR, view.globG, view.globB);
 		else
-			renderer.setColor(Color.BLACK);
+			setColor(gl, 0,0,0);
 
 		//Have to subtract 85 from player one's x point for some reason
 		renderer.draw("Powerups: " + Integer.toString(GameLogic.leftPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.leftPlayerDefense.size()), (int) (view.getWidth()*-.001), (int) (view.getHeight()*.96));
