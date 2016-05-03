@@ -63,16 +63,20 @@ public final class KeyHandler extends KeyAdapter
 
 				//left player (one) mallet movement
 			case KeyEvent.VK_W:
-				view.getLeftMallet().moveUp();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveUp();
 				break;
 			case KeyEvent.VK_S:
-				view.getLeftMallet().moveDown();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveDown();
 				break;
 			case KeyEvent.VK_A:
-				view.getLeftMallet().moveLeft();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveLeft();
 				break;
 			case KeyEvent.VK_D:
-				view.getLeftMallet().moveRight();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveRight();
 				break;
 
 				// left player(one) do powerup

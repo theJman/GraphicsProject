@@ -76,21 +76,20 @@ public class Field extends Shape {
 			setColor(gl, 0,0,0);
 		else if(view.whichSkin == 1) // nean
 			setColor(gl,view.globR, view.globG, view.globB);
-		else
+		else if(view.whichSkin == 2)
 			setColor(gl, 0,0,0);
 
 		int leftScore = GameLogic.leftPlayerScore;
 		int rightScore = GameLogic.rightPlayerScore;
 		if(leftScore > rightScore)
 		{
-			renderer.draw("LEFT PLAYER WINS!!!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.6));
-			renderer.draw("RIGHT PLAYER SUCKS!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.4));
+			renderer.draw("LEFT PLAYER WINS!!!", (int) (view.getWidth()*.02), (int) (view.getHeight()*.6));
+			renderer.draw("RIGHT PLAYER SUCKS!", (int) (view.getWidth()*.02), (int) (view.getHeight()*.4));
 		}
-		else
+		else if(rightScore > leftScore)
 		{
-			renderer.draw("RIGHT PLAYER WINS!!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.6));
-			renderer.draw("LEFT PLAYER SUCKS!!", (int) (view.getWidth()*.01), (int) (view.getHeight()*.4));
-
+			renderer.draw("RIGHT PLAYER WINS!!", (int) (view.getWidth()*.02), (int) (view.getHeight()*.6));
+			renderer.draw("LEFT PLAYER SUCKS!!", (int) (view.getWidth()*.02), (int) (view.getHeight()*.4));
 		}
 
 		renderer.endRendering();
@@ -146,7 +145,6 @@ public class Field extends Shape {
 		else
 			setColor(gl, 0,0,0);
 
-		//Have to subtract 85 from player one's x point for some reason
 		renderer.draw("Powerups: " + Integer.toString(GameLogic.leftPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.leftPlayerDefense.size()), (int) (view.getWidth()*-.001), (int) (view.getHeight()*.96));
 		renderer.draw("Powerups: " + Integer.toString(GameLogic.rightPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.rightPlayerDefense.size()), (int) (view.getWidth()*.7), (int) (view.getHeight()*.96));
 		renderer.endRendering();

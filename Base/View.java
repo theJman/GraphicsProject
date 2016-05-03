@@ -462,7 +462,7 @@ public final class View
 	{
 		GL2		gl = drawable.getGL().getGL2();
 
-		String[]	list = {"avalanche.png","bruins.png","canadiens.png","canes.png","canucks.png",
+		String[]	list = {"avalanche.png","blues.png","bruins.png","canadiens.png","canes.png","canucks.png",
 							"caps.png","coyotes.png","devils.png","ducks.png","flames.png",
 							"flyers.png","hawks.png","island.png","jackets.png","jets.png",
 							"kings.png","leafs.png","lightning.png","oilers.png","panthers.png",
@@ -529,12 +529,12 @@ public final class View
 		if(which.equals("left"))
 		{
 			if(GameLogic.leftPlayerPowerup.isEmpty()) return;
-			startLeftPowerup(GameLogic.leftPlayerPowerup.pop());
+			else startLeftPowerup(GameLogic.leftPlayerPowerup.pop());
 		}
 		else if(which.equals("right"))
 		{
 			if(GameLogic.rightPlayerPowerup.isEmpty()) return;
-			startRightPowerup(GameLogic.rightPlayerPowerup.pop());
+			else startRightPowerup(GameLogic.rightPlayerPowerup.pop());
 		}
 	}
 
@@ -543,12 +543,12 @@ public final class View
 		if(which.equals("left"))
 		{
 			if(GameLogic.leftPlayerDefense.isEmpty()) return;
-			startLeftPowerup(4);
+			else startLeftPowerup(4);
 		}
 		else if(which.equals("right"))
 		{
 			if(GameLogic.rightPlayerDefense.isEmpty()) return;
-			startRightPowerup(4);
+			else startRightPowerup(4);
 		}
 	}
 
@@ -570,7 +570,6 @@ public final class View
 				break;
 
 			case 3:		// fire all pucks directly toward the opponent
-				leftPowerup = 3;
 				for(Shape s : shapes)
 				{
 					if(s instanceof Puck)
@@ -618,10 +617,11 @@ public final class View
 						{
 							s.velocity.x = 0.0;
 							s.velocity.y = 0.0;
-							GameLogic.leftPlayerDefense.pop();
 						}
 					}
 				}
+				GameLogic.leftPlayerDefense.pop();
+				break;
 
 			case 5:
 				for(Shape s : shapes)
@@ -667,13 +667,13 @@ public final class View
 
 			case 1:		// freeze opponents mallet powerup for x seconds
 				rightPowerup = 1;
-				rightEnd = counter + 35;
+				rightEnd = counter + 30;
 				leftMallet.stop = true;
 				break;
 
 			case 2:		// make oppoents mallet small for x seconds
 				rightPowerup = 2;
-				rightEnd = counter + 35;
+				rightEnd = counter + 30;
 				leftMallet.radius = leftMallet.radius * .25;
 				break;
 
@@ -726,10 +726,10 @@ public final class View
 						{
 							s.velocity.x = 0.0;
 							s.velocity.y = 0.0;
-							GameLogic.rightPlayerDefense.pop();
 						}
 					}
 				}
+				GameLogic.rightPlayerDefense.pop();
 				break;
 		}
 	}
@@ -752,6 +752,7 @@ public final class View
 					leftMallet.radius = leftMallet.defaultRadius;
 					rightPowerup = -1;
 				}
+				break;
 		}
 	}
 
