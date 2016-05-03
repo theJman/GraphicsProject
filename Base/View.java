@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
 
+import Shapes.Circle;
 import Shapes.CircleInteraction;
 import Shapes.Field;
 import Shapes.Interaction;
@@ -63,15 +64,14 @@ public final class View
 	public int specialpuckChance = 1;
 	public boolean specialpuckExists = false;
 
-	public boolean displaymode = true;
 
-	// TODO
 	public int leftPowerup = -1;
 	public int rightPowerup = -1;
-	public int leftStart = 0;
 	public int leftEnd = 0;
-	public int rightStart = 0;
 	public int rightEnd = 0;
+
+	// display mode and loading images
+	public boolean displaymode = true;
 
 
 	//**********************************************************************
@@ -434,8 +434,12 @@ public final class View
 			{
 				if(shapes.get(i) instanceof Field)
 					win = i;
-				else
+				else if(shapes.get(i) instanceof Puck || shapes.get(i) instanceof Circle)
+				{
+					shapes.get(i).velocity.x = 0.0;
+					shapes.get(i).velocity.y = 0.0;
 					shapes.get(i).render(drawable);
+				}
 			}
 			shapes.get(win).render(drawable);
 		}
@@ -457,14 +461,14 @@ public final class View
 	private void loadTeams(GLAutoDrawable drawable)
 	{
 		GL2		gl = drawable.getGL().getGL2();
-		String[] list = {"avalanche.png"};
-//				,"bruins.png","canadiens.png","canes.png","canucks.png",
-//							"caps.png","coyotes.png","devils.png","ducks.png","flames.png",
-//							"flyers.png","hawks.png","island.png","jackets.png","jets.png",
-//							"kings.png","leafs.png","lightning.png","oilers.png","panthers.png",
-//							"penguins.png","preds.png","rangers.png","sabres.png","senators.png",
-//							"sharks.png","stars.png","wild.png","wings.png"
-//						};
+
+		String[]	list = {"avalanche.png","bruins.png","canadiens.png","canes.png","canucks.png",
+							"caps.png","coyotes.png","devils.png","ducks.png","flames.png",
+							"flyers.png","hawks.png","island.png","jackets.png","jets.png",
+							"kings.png","leafs.png","lightning.png","oilers.png","panthers.png",
+							"penguins.png","preds.png","rangers.png","sabres.png","senators.png",
+							"sharks.png","stars.png","wild.png","wings.png"
+							};
 
 		for(String team : list)
 		{
@@ -615,6 +619,20 @@ public final class View
 							s.velocity.x = 0.0;
 							s.velocity.y = 0.0;
 							GameLogic.leftPlayerDefense.pop();
+						}
+					}
+				}
+
+			case 5:
+				for(Shape s : shapes)
+				{
+					if(s instanceof Puck)
+					{
+						if(s.center.x <= 0.0)
+						{
+							s.velocity.x = 0.0;
+							s.velocity.y = 0.0;
+							// FOR DISPLAY MODE ONLY - DOESN'T POP STACK
 						}
 					}
 				}

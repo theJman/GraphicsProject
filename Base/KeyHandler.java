@@ -129,7 +129,7 @@ public final class KeyHandler extends KeyAdapter
 
 			case KeyEvent.VK_4:
 				if(view.displaymode)
-					view.startLeftPowerup(4);
+					view.startLeftPowerup(5);
 				break;
 
 			case KeyEvent.VK_5:
