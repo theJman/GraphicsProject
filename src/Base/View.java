@@ -690,12 +690,14 @@ public final class View
 			case 1:		// freeze opponents mallet powerup for x seconds
 				rightPowerup = 1;
 				rightEnd = counter + 100;
+
 				leftMallet.stop = true;
 				break;
 
 			case 2:		// make oppoents mallet small for x seconds
 				rightPowerup = 2;
 				rightEnd = counter + 100;
+
 				leftMallet.radius = leftMallet.radius * .25;
 				break;
 
