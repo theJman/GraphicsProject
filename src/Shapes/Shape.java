@@ -6,6 +6,7 @@ import Base.View;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 /**
  * Base Class for all of the shapes that we need to draw
@@ -45,6 +46,9 @@ public class Shape {
 	}
 	public void setColor(GL2 gl, double r, double g, double b){
 		setColor(gl, r, g, b, 255.0);
+	}
+	public void setColor(TextRenderer renderer, float r, float g, float b){
+		renderer.setColor(r/255.0f, g/255.0f, b/255.0f, 1.0f);
 	}
 
 	public double convertWidth(double w){

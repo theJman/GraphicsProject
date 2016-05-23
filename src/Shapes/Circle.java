@@ -21,10 +21,11 @@ import com.jogamp.opengl.GLAutoDrawable;
  */
 public class Circle extends Shape {
 
-	public double defaultRadius = 100;
-	public double radius = 100;
+	public double defaultRadius = 80;
+	public double radius = 80;
 	protected int cantBounceTick = 0;//only can bounce when this is 0. Added so cicles cannot stick together!:)
 	protected int mass = 1;//default mass
+	protected int sparkCount = 0;
 
 	//list of all of the points on the circle(used for bouncing it off of the walls)
 	protected ArrayList<Point2D.Double> points;
@@ -51,8 +52,6 @@ public class Circle extends Shape {
 		this.puck = puck;
 		points = new ArrayList<Point2D.Double>();
 
-		// if its a mallet make it a little bigger
-		if(!this.puck) radius = 125;
 
 		// Randomly initialize the pucks outlining colors for the regular view
 		Random rand = new Random();
@@ -61,7 +60,7 @@ public class Circle extends Shape {
 		blue = 0.0 + (255.0 - 0.0) * rand.nextDouble();
 
 		if(puck)
-			radius = 50.0 + (125.0 - 50.0) * rand.nextDouble();
+			radius = 40.0 + (30.0) * rand.nextDouble();
 	}
 
 	@Override
@@ -70,7 +69,7 @@ public class Circle extends Shape {
 
 		double x = convertWidth(view.getWidth());
 		double y = convertHeight(view.getHeight()*(1.0/3));
-		if(puck)
+		if(puck && this instanceof Puck)
 		{
 			if(center.x - convertWidth(radius) < -x*.9 && center.y + convertHeight(radius) < y && center.y - convertHeight(radius) > -y)
 			{
@@ -202,7 +201,11 @@ public class Circle extends Shape {
 		gl.glEnd();
 
 		// If there is a collision, create a spark
-		if(sparks) drawSparks(gl);
+		if(sparks) sparkCount = 4;
+		if(sparkCount > 0){
+			sparkCount--;
+			drawSparks(gl);
+		}
 	}
 
 	public void drawSparks(GL2 gl)

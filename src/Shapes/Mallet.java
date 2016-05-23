@@ -19,11 +19,11 @@ public class Mallet extends Circle {
 
 	// Mallet stock variables: moveSpeed = .001, moveAccel = .01, maxVel = .035
 	public double defaultSpeed = .001;
-	public double defaultAccel = .01;
+	public double defaultAccel = .007;
 	public double defaultMax = .035;
 
 	public double moveSpeed = .001;
-	public double moveAccel = .01;
+	public double moveAccel = .007;
 	public double maxVel = .035;
 	protected boolean isLeft;
 
@@ -36,6 +36,7 @@ public class Mallet extends Circle {
 		super(nView, false);
 		mass = 100;
 		isLeft = nIsLeft;
+		radius = 90;
 	}
 
 

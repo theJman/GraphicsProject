@@ -15,6 +15,7 @@ import Shapes.Circle;
 import Shapes.CircleInteraction;
 import Shapes.Field;
 import Shapes.Interaction;
+import Shapes.InvisiblePuck;
 import Shapes.Mallet;
 import Shapes.Puck;
 import Shapes.Shape;
@@ -48,7 +49,7 @@ public final class View
 	private static final DecimalFormat	FORMAT = new DecimalFormat("0.000");
 
 	public int whichSkin = 0; // Skin is the look of the field, 0-regular, 1-neon, 3-???
-	public boolean reintroduce = false;		// whether or not to reintroduce pucks when they are scored
+	public boolean reintroduce = true;		// whether or not to reintroduce pucks when they are scored
 	public String whichTeam = "none";
 	public HashMap<String, Texture> teamlist = new HashMap<String, Texture>();
 	public String 	scoreDirection;	// false is right++, true is left++
@@ -241,6 +242,13 @@ public final class View
 	{
 		return h;
 	}
+	
+	public void slow(){
+		for(Shape s : shapes){
+			s.velocity.x /= 2;
+			s.velocity.y /= 2;
+		}
+	}
 
 	public Mallet getLeftMallet(){
 		return leftMallet;
@@ -401,6 +409,7 @@ public final class View
 				circlesInteraction.deleteCircle(s.id);
 				wallInteraction.deleteCircle(s.id);
 				shapes.remove(i);
+				i--;
 				puckcounter -= 1;
 				if(reintroduce == true) addPuck();
 			}
@@ -462,7 +471,7 @@ public final class View
 	{
 		GL2		gl = drawable.getGL().getGL2();
 
-		String[]	list = {"avalanche.png","bruins.png","canadiens.png","canes.png","canucks.png",
+		String[]	list = {"avalanche.png","blues.png","bruins.png","canadiens.png","canes.png","canucks.png",
 							"caps.png","coyotes.png","devils.png","ducks.png","flames.png",
 							"flyers.png","hawks.png","island.png","jackets.png","jets.png",
 							"kings.png","leafs.png","lightning.png","oilers.png","panthers.png",
@@ -505,6 +514,19 @@ public final class View
 		puckcounter += 1;
 	}
 
+	public void addInvisible(){
+		Random rand = new Random();
+
+		InvisiblePuck newPuck = new InvisiblePuck(this);
+		newPuck.getCenter().x = -.1 + (.1 - -.1) * rand.nextDouble();	// x value inside center circle
+		newPuck.getCenter().y = -.1 + (.1 - -.1) * rand.nextDouble();	// y value inside center circle
+		newPuck.getVelocity().x = -.005 + (.005 - -.005) * rand.nextDouble();	// random x val
+		newPuck.getVelocity().y = -.005 + (.005 - -.005) * rand.nextDouble();	// random y val
+		circlesInteraction.addCircle(newPuck);
+		wallInteraction.addCircle(newPuck);
+		shapes.add(newPuck);
+		puckcounter += 1;
+	}
 	private void specialPuck()
 	{
 		// This powerup will potentially highlight one puck that will make it worth 2 times the score
@@ -529,12 +551,12 @@ public final class View
 		if(which.equals("left"))
 		{
 			if(GameLogic.leftPlayerPowerup.isEmpty()) return;
-			startLeftPowerup(GameLogic.leftPlayerPowerup.pop());
+			else startLeftPowerup(GameLogic.leftPlayerPowerup.pop());
 		}
 		else if(which.equals("right"))
 		{
 			if(GameLogic.rightPlayerPowerup.isEmpty()) return;
-			startRightPowerup(GameLogic.rightPlayerPowerup.pop());
+			else startRightPowerup(GameLogic.rightPlayerPowerup.pop());
 		}
 	}
 
@@ -543,12 +565,12 @@ public final class View
 		if(which.equals("left"))
 		{
 			if(GameLogic.leftPlayerDefense.isEmpty()) return;
-			startLeftPowerup(4);
+			else startLeftPowerup(4);
 		}
 		else if(which.equals("right"))
 		{
 			if(GameLogic.rightPlayerDefense.isEmpty()) return;
-			startRightPowerup(4);
+			else startRightPowerup(4);
 		}
 	}
 
@@ -559,18 +581,17 @@ public final class View
 
 			case 1:		// freeze opponents mallet powerup for x seconds
 				leftPowerup = 1;
-				leftEnd = counter + 30;
+				leftEnd = counter + 100;
 				rightMallet.stop = true;
 				break;
 
 			case 2:		// make oppoents mallet small for x seconds
 				leftPowerup = 2;
-				leftEnd = counter + 30;
+				leftEnd = counter + 100;
 				rightMallet.radius = rightMallet.radius * .25;
 				break;
 
 			case 3:		// fire all pucks directly toward the opponent
-				leftPowerup = 3;
 				for(Shape s : shapes)
 				{
 					if(s instanceof Puck)
@@ -618,10 +639,11 @@ public final class View
 						{
 							s.velocity.x = 0.0;
 							s.velocity.y = 0.0;
-							GameLogic.leftPlayerDefense.pop();
 						}
 					}
 				}
+				GameLogic.leftPlayerDefense.pop();
+				break;
 
 			case 5:
 				for(Shape s : shapes)
@@ -667,13 +689,13 @@ public final class View
 
 			case 1:		// freeze opponents mallet powerup for x seconds
 				rightPowerup = 1;
-				rightEnd = counter + 35;
+				rightEnd = counter + 100;
 				leftMallet.stop = true;
 				break;
 
 			case 2:		// make oppoents mallet small for x seconds
 				rightPowerup = 2;
-				rightEnd = counter + 35;
+				rightEnd = counter + 100;
 				leftMallet.radius = leftMallet.radius * .25;
 				break;
 
@@ -726,10 +748,10 @@ public final class View
 						{
 							s.velocity.x = 0.0;
 							s.velocity.y = 0.0;
-							GameLogic.rightPlayerDefense.pop();
 						}
 					}
 				}
+				GameLogic.rightPlayerDefense.pop();
 				break;
 		}
 	}
@@ -752,6 +774,7 @@ public final class View
 					leftMallet.radius = leftMallet.defaultRadius;
 					rightPowerup = -1;
 				}
+				break;
 		}
 	}
 
@@ -821,7 +844,7 @@ public final class View
 		for(int i = shapes.size()-1; i >= 0; i--)
 		{
 			Shape s = shapes.get(i);
-			if(s instanceof Puck)
+			if(s instanceof Puck || s instanceof InvisiblePuck)
 			{
 				id = shapes.get(i).id;
 				shapes.remove(i);
@@ -883,7 +906,3 @@ public final class View
 		while(puckcounter > 0) deletePuck();
 	}
 }
-
-
-
-//******************************************************************************

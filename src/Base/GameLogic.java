@@ -1,6 +1,3 @@
-/**
- *
- */
 package Base;
 
 import java.util.Random;
@@ -57,16 +54,32 @@ public class GameLogic {
 	}
 
 	private void increaseRightPlayerScore(boolean bonus) {
-		if(bonus) rightPlayerScore += 2;
-		else rightPlayerScore++;
+		if(bonus)
+		{
+			rightPlayerScore += 2;
+			rightPlayerStreak += 2;
+		}
+		else
+		{
+			rightPlayerScore++;
+			rightPlayerStreak += 1;
+		}
 		leftPlayerStreak = 0;
 		checkRightWin();
 		checkRightPow();
 	}
 
 	private void increaseLeftPlayerScore(boolean bonus) {
-		if(bonus) leftPlayerScore += 2;
-		else leftPlayerScore++;
+		if(bonus)
+		{
+			leftPlayerScore += 2;
+			leftPlayerStreak += 2;
+		}
+		else
+		{
+			leftPlayerScore++;
+			leftPlayerStreak += 1;
+		}
 		rightPlayerStreak = 0;
 		checkLeftWin();
 		checkLeftPow();
@@ -86,15 +99,16 @@ public class GameLogic {
 		boolean givePowerup = false;
 		switch(rightPlayerStreak)
 		{
-			case 0: givePowerup = Utilities.getChance(20); break;
-			case 1: givePowerup = Utilities.getChance(30); break;
-			case 2: givePowerup = Utilities.getChance(40); break;
-			case 3: givePowerup = Utilities.getChance(50); break;
+			case 1: givePowerup = Utilities.getChance(20); break;
+			case 2: givePowerup = Utilities.getChance(30); break;
+			case 3: givePowerup = Utilities.getChance(40); break;
+			case 4: givePowerup = Utilities.getChance(50); break;
 			default: givePowerup = Utilities.getChance(60); break;
 		}
 		if(givePowerup)
 		{
 			int pow = whichPow();
+//			System.out.println(pow);
 			if(pow == 4)
 				rightPlayerDefense.push(pow);
 			else

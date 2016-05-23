@@ -68,16 +68,19 @@ public class Field extends Shape {
 	{
 		int height = draw.getSurfaceHeight();
 		int width = draw.getSurfaceWidth();
+		
+		
 
-		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 200));
+		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 110));
 		renderer.beginRendering(width, height);
-
+		
+		//set color 
 		if(view.whichSkin == 0) // regular
-			setColor(gl, 0,0,0);
+			setColor(renderer, 0,0,0);
 		else if(view.whichSkin == 1) // nean
-			setColor(gl,view.globR, view.globG, view.globB);
+			setColor(renderer,view.globR, view.globG, view.globB);
 		else
-			setColor(gl, 0,0,0);
+			setColor(renderer, 0,0,0);
 
 		int leftScore = GameLogic.leftPlayerScore;
 		int rightScore = GameLogic.rightPlayerScore;
@@ -104,28 +107,29 @@ public class Field extends Shape {
 		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 100));
 		renderer.beginRendering(width, height);
 
+		//set color 
 		if(view.whichSkin == 0) // regular
-			setColor(gl, 0,0,0);
+			setColor(renderer, 0,0,0);
 		else if(view.whichSkin == 1) // nean
-			setColor(gl,view.globR, view.globG, view.globB);
+			setColor(renderer,view.globR, view.globG, view.globB);
 		else
-			setColor(gl, 0,0,0);
+			setColor(renderer, 0,0,0);
 
 		if(GameLogic.leftPlayerScore < 10)
 		{
-			renderer.draw(Integer.toString(0) + Integer.toString(GameLogic.leftPlayerScore), (int) (view.getWidth()*.35), (int) (view.getHeight()*.5));
+			renderer.draw(Integer.toString(0) + Integer.toString(GameLogic.leftPlayerScore), (int) (view.getWidth()*.33), (int) (view.getHeight()*.8));
 		}
 		else
 		{
-			renderer.draw(Integer.toString(GameLogic.leftPlayerScore), (int) (view.getWidth()*.35), (int) (view.getHeight()*.5));
+			renderer.draw(Integer.toString(GameLogic.leftPlayerScore), (int) (view.getWidth()*.33), (int) (view.getHeight()*.8));
 		}
 		if(GameLogic.rightPlayerScore < 10)
 		{
-			renderer.draw(Integer.toString(0) + Integer.toString(GameLogic.rightPlayerScore),(int) (view.getWidth()*.59), (int) (view.getHeight()*.5));
+			renderer.draw(Integer.toString(0) + Integer.toString(GameLogic.rightPlayerScore),(int) (view.getWidth()*.57), (int) (view.getHeight()*.8));
 		}
 		else
 		{
-			renderer.draw(Integer.toString(GameLogic.rightPlayerScore),(int) (view.getWidth()*.59), (int) (view.getHeight()*.5));
+			renderer.draw(Integer.toString(GameLogic.rightPlayerScore),(int) (view.getWidth()*.57), (int) (view.getHeight()*.8));
 		}
 
 		renderer.endRendering();
@@ -136,16 +140,16 @@ public class Field extends Shape {
 		int height = draw.getSurfaceHeight();
 		int width = draw.getSurfaceWidth();
 
-		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 50));
+		TextRenderer renderer = new TextRenderer(new Font("Verdana", Font.BOLD, 30));
 		renderer.beginRendering(width, height);
-
+		//set color 
 		if(view.whichSkin == 0) // regular
-			setColor(gl, 0,0,0);
+			setColor(renderer, 0,0,0);
 		else if(view.whichSkin == 1) // nean
-			setColor(gl,view.globR, view.globG, view.globB);
+			setColor(renderer,view.globR, view.globG, view.globB);
 		else
-			setColor(gl, 0,0,0);
-
+			setColor(renderer, 0,0,0);
+		
 		//Have to subtract 85 from player one's x point for some reason
 		renderer.draw("Powerups: " + Integer.toString(GameLogic.leftPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.leftPlayerDefense.size()), (int) (view.getWidth()*-.001), (int) (view.getHeight()*.96));
 		renderer.draw("Powerups: " + Integer.toString(GameLogic.rightPlayerPowerup.size()) + " Defenses: " + Integer.toString(GameLogic.rightPlayerDefense.size()), (int) (view.getWidth()*.7), (int) (view.getHeight()*.96));
@@ -171,7 +175,7 @@ public class Field extends Shape {
 	{
 		// TODO deal with line sizes between Operating systems
 		// Draw the lines
-		gl.glLineWidth(20);
+		gl.glLineWidth(5);
 		gl.glBegin(GL2.GL_LINES);
 			// Center line
 			if(view.whichSkin == 0)
@@ -240,7 +244,7 @@ public class Field extends Shape {
 
 	private void drawCircle(GL2 gl, double radius, double centerX, double centerY, double r, double g, double b, double alpha){
 		// Color portion of the circle
-		gl.glLineWidth(10);
+		gl.glLineWidth(2);
 		gl.glBegin(GL2.GL_TRIANGLE_FAN);
 		setColor(gl, r, g, b, alpha);
 		gl.glVertex2d(centerX,centerY);
@@ -267,8 +271,8 @@ public class Field extends Shape {
 		for (int i=0; i<=32; i++)
 		{
 			double a = (2.0 * Math.PI) * (i / 32.0);
-			double x = centerX + convertWidth(radius*.9) * Math.cos(a);
-			double y = centerY + convertHeight(radius*.9) * Math.sin(a);
+			double x = centerX + convertWidth(radius*.95) * Math.cos(a);
+			double y = centerY + convertHeight(radius*.95) * Math.sin(a);
 			gl.glVertex2d(x,y);
 		}
 		gl.glEnd();

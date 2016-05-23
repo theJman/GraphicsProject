@@ -1,4 +1,6 @@
 package Shapes;
+import com.jogamp.opengl.GLAutoDrawable;
+
 import Base.View;
 
 /**
@@ -17,6 +19,17 @@ public class Puck extends Circle {
 	 */
 	public Puck(View nView) {
 		super(nView, true);
+	}
+	
+	
+	@Override
+	public void update(GLAutoDrawable drawable) {
+
+		//friction
+		velocity.x /= 1.001;
+		velocity.y /= 1.001;
+		
+		super.update(drawable);
 	}
 
 }

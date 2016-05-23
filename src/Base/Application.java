@@ -35,7 +35,7 @@ public final class Application
 	 *
 	 * @author tremc_000
 	 */
-	public static final int			TableHeight		= 700;
+	public static final int			TableHeight		= 800;
 	public static final double		TableWidthMult	= 1.8;
 
 	public static final Rectangle	DEFAULT_BOUNDS	=
@@ -312,8 +312,8 @@ public final class Application
 			public void actionPerformed(ActionEvent e)
 			{
 				view.reintroduce = true;
-				yes.setEnabled(false);
-				no.setEnabled(true);
+				yes.setEnabled(true);
+				no.setEnabled(false);
 			}
 		});
 
@@ -323,8 +323,8 @@ public final class Application
 			public void actionPerformed(ActionEvent e)
 			{
 				view.reintroduce = false;
-				yes.setEnabled(true);
-				no.setEnabled(false);
+				yes.setEnabled(false);
+				no.setEnabled(true);
 			}
 		});
 

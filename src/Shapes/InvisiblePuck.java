@@ -17,7 +17,7 @@ public class InvisiblePuck extends Circle {
 	 * @param nView
 	 */
 	public InvisiblePuck(View nView) {
-		super(nView);
+		super(nView, true);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -25,6 +25,11 @@ public class InvisiblePuck extends Circle {
 	@Override
 	public void render(GLAutoDrawable drawable) {
 		//don't render, its invisible!
+		if(sparks) sparkCount = 4;
+		if(sparkCount > 0){
+			sparkCount--;
+			drawSparks(drawable.getGL().getGL2());
+		}
 	}
 
 }

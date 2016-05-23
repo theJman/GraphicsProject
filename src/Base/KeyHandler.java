@@ -54,25 +54,36 @@ public final class KeyHandler extends KeyAdapter
 			case KeyEvent.VK_MINUS:
 				view.deletePuck();	break;
 
+			case KeyEvent.VK_0:
+				for(int i = 0;i<10;i++){view.addPuck();}
+				break;
 			case KeyEvent.VK_EQUALS:
 				view.addPuck();	break;
 
 			case KeyEvent.VK_DELETE:
 				view.clear();
 				return;
+				
+			case KeyEvent.VK_CLOSE_BRACKET:
+				view.addInvisible();
+				break;
 
 				//left player (one) mallet movement
 			case KeyEvent.VK_W:
-				view.getLeftMallet().moveUp();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveUp();
 				break;
 			case KeyEvent.VK_S:
-				view.getLeftMallet().moveDown();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveDown();
 				break;
 			case KeyEvent.VK_A:
-				view.getLeftMallet().moveLeft();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveLeft();
 				break;
 			case KeyEvent.VK_D:
-				view.getLeftMallet().moveRight();
+				if(!view.getLeftMallet().stop)
+					view.getLeftMallet().moveRight();
 				break;
 
 				// left player(one) do powerup
@@ -132,12 +143,17 @@ public final class KeyHandler extends KeyAdapter
 					view.startLeftPowerup(5);
 				break;
 
+				
 			case KeyEvent.VK_5:
 				if(view.displaymode)
 				{
-					GameLogic.leftPlayerScore = 50;
+					GameLogic.leftPlayerScore = 100;
 					GameLogic.checkLeftWin();
 				}
+				break;
+				
+			case KeyEvent.VK_L:
+				view.slow();
 				break;
 		}
 
@@ -179,5 +195,3 @@ public final class KeyHandler extends KeyAdapter
 		}
 	}
 }
-
-//******************************************************************************
